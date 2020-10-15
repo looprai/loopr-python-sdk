@@ -25,3 +25,4 @@ class Dataset(LooprObject):
         request = {"dataset_id": self.uid, **kwargs}
         response = self.client.post(path=URL_PATH, body=request)
         return row._add_row_instance(self, **response)
+

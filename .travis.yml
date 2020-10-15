@@ -1,0 +1,47 @@
+dist: xenial
+language: python
+env:
+  - secure: ERx1gbYkgBVfmydtf3uQlkzIEH3Qb23Od3qr/nRNkl1ys5pKsZ2fYGiSXO6xVF7YXA/8Wb4KBvIUrVevuDWxR0bdLh3Iv8YNt6Prscz/sWDTGk/U8i+nlLagB/yttTcbEPz7BHP/V6EwHpfDBtE0r8h/5JVNydaZq1en0OB/5x96cFGlzbyj+jIJaGFznoLTBCfR9aiv7DsxlPhpsLRSDrDbhpM3Z/u2MXlNTEstPF4e8OoGvX1xMt8XA8SPk1sKAqCn2RdBB1ftkE07eyKK4XuAkfwo1Q5fQrR3gIL5Wb6RHNAhy3OWEqp6nFuoC8v4PzGmTmnMwnenzt1Q+uE4yGZ0KQgbw1RnCXyvj8U1RkEgdSfNJX45j2kOVD5rc9XzY+hNIhIrihD4IEAA+rJ30dITbL//QWxYDzhoPk/vB4hSdjF2ezEkxQwJIaDh5g6EKh1wPvjD05QSGj33kaCJ9SHgauI37kl9Od0mbelnPQL1tIpiAnrpvj9ARANjCurwNyrc4SfEzEXN12dJ6Nq1KeY8nAb5JD22jGBR9URVquERyGod21DUHS13BdC15TsW44sGz20IMSdKNUX2qRyQXYIqqWfRg+SJJFbnSRZvcfIHXEAE09rxc4KakEuIgvkyrYCpmkMchd4TsN4fcEOudMVUaxLQd8yge4udpgN8dkc=
+before_install:
+  - pip3 install poetry
+  - poetry config virtualenvs.create false
+install:
+  - poetry install
+stages:
+  - name: "lint and test"
+  - name: "build and publish"
+    if: tag IS present
+jobs:
+  include:
+    - stage: "lint and test"
+      name: "lint using python 3.6 "
+      python: 3.6
+      script:
+        - make lint
+    - name: "lint using python 3.7 "
+      python: 3.7
+      script:
+        - make lint
+    - name: "lint using python 3.8 "
+      python: 3.8
+      script:
+        - make lint
+    - name: "test using python 3.6 "
+      python: 3.6
+      script:
+        - make test
+    - name: "test using python 3.7 "
+      python: 3.7
+      script:
+        - make test
+    - name: "test using python 3.8 "
+      python: 3.8
+      script:
+        - make test
+    - stage: "build and publish"
+      python:
+        - 3.8
+      script:
+        - poetry build
+        - twine upload --skip-existing dist/* -u __token__ -p $PYPI_TOKEN
+
