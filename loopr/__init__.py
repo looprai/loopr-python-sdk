@@ -1,3 +1,3 @@
 _LOOPR_API_KEY = "LOOPR_API_KEY"
 _LOOPR_API_ENDPOINT = "LOOPR_API_ENDPOINT"
-DEFAULT_API_ENDPOINT="https://api.loopr.ai/"
+DEFAULT_API_ENDPOINT = "https://api.loopr.ai/"

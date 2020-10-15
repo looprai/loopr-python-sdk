@@ -2,7 +2,6 @@ from enum import Enum, auto
 
 
 class Field:
-
     class Type(Enum):
         Int = auto()
         Float = auto()
@@ -30,9 +29,6 @@ class Field:
     def DateTime(*args):
         return Field(Field.Type.DateTime, *args)
 
-
-    def __init__(self,
-                 field_type: Type,
-                 name):
+    def __init__(self, field_type: Type, name):
         self.field_type = field_type
         self.name = name

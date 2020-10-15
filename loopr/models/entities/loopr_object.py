@@ -9,15 +9,15 @@ from loopr.models.entities.loopr_enitity import LooprEntity
 class LooprObject(LooprEntity):
     uid = Field.String("uid")
 
-    def __init__(self, client=None,field_values=None):
+    def __init__(self, client=None, field_values=None):
         if field_values and client:
-            self.client= client
+            self.client = client
             self._set_field_values(field_values)
 
     def _set_field_values(self, field_values):
         for field in self.fields():
             try:
-                if field.name == 'uid':
+                if field.name == "uid":
                     value = field_values[self._get_unique_id()]
                 else:
                     value = field_values[field.name]
@@ -30,13 +30,17 @@ class LooprObject(LooprEntity):
                     value = value.replace(tzinfo=timezone.utc)
                 except ValueError:
                     logger.warning(
-                        "Failed to convert value '%s' to datetime for "
-                        "field %s", value, field)
+                        "Failed to convert value '%s' to datetime for " "field %s",
+                        value,
+                        field,
+                    )
 
             setattr(self, field.name, value)
 
-    def _get_unique_id(self,):
-        return self.entity_type +"_id"
+    def _get_unique_id(
+        self,
+    ):
+        return self.entity_type + "_id"
 
     def __repr__(self):
         type_name = self.type_name()
