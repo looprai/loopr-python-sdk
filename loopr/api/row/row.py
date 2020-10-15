@@ -14,4 +14,3 @@ class Row(LooprObject):
         response = self.client.post(path=URL_PATH, body=request)
         return response
         # logger.info(response)
-

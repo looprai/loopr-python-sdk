@@ -1,8 +1,9 @@
 from loguru import logger
 
+from loopr.api.row import RowInitializer
 from loopr.models.entities.data_types import Field
 from loopr.models.entities.loopr_object import LooprObject
-from loopr.api.row import RowInitializer
+
 
 class Dataset(LooprObject):
     entity_type = "dataset"
