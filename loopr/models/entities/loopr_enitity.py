@@ -15,7 +15,6 @@ class LooprEntity:
         for attribute in cls._attributes_of_type(Field):
             yield attribute
 
-
     @classmethod
     def field(cls, field_name):
         field_obj = getattr(cls, field_name, None)

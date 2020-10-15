@@ -13,7 +13,7 @@ def DatasetInitializer(dataset_type):
         "image": ImageDataset,
         "paired": PairedDataset,
         "text": TextDataset,
-        "sku": SKUDataset
+        "sku": SKUDataset,
     }
 
     return datasets[dataset_type]

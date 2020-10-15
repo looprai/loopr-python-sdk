@@ -1,0 +1,23 @@
+dist: xenial
+language: python
+stages:
+  - name: "Lint and Test"
+    if: branch = main AND (type = pull_request OR type = push)
+jobs:
+  include:
+    - stage: "Lint and Test"
+      name: "using python 3.6 "
+      python: 3.6
+    - name: "using python 3.7 "
+      python: 3.7
+    - name: "using python 3.8 "
+      python: 3.8
+
+before_install:
+  - pip3 install poetry
+  - poetry config virtualenvs.create false
+install:
+  - poetry install
+script:
+  - make lint
+  - make test
