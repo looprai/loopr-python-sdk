@@ -1,6 +1,7 @@
 from loguru import logger
 
-_PAGE_SIZE =2
+_PAGE_SIZE = 2
+
 
 class LooprObjectCollection:
     def __init__(self, client, path, deref_key, obj_class):
@@ -21,16 +22,14 @@ class LooprObjectCollection:
         if len(self._data) <= self._data_ind:
             if self._fetched_all:
                 raise StopIteration()
-            params = {"page":self._fetched_pages, "limit": _PAGE_SIZE }
+            params = {"page": self._fetched_pages, "limit": _PAGE_SIZE}
             self._fetched_pages += 1
 
-            response= self.client.get(path=self.path, params=params)
+            response = self.client.get(path=self.path, params=params)
             response = response[self.deref_key]
             logger.info("fetched result %s", len(response))
 
-            page_data = [
-                self.obj_class(self.client, result) for result in response
-            ]
+            page_data = [self.obj_class(self.client, result) for result in response]
             self._data.extend(page_data)
 
             if len(page_data) < _PAGE_SIZE:
