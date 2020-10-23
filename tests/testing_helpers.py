@@ -1,0 +1,5 @@
+TEST_IMAGE_DATASET_TYPE = "image"
+TEST_IMAGE_DATASET_NAME = "test_image_dataset"
+TEST_PAIRED_DATASET_TYPE = "paired"
+TEST_PAIRED_DATASET_NAME = "test_paired_dataset"
+TEST_DATASET_LISTING_NAME = "test_listing_dataset"

@@ -19,6 +19,7 @@ class Dataset(LooprObject):
         request = {"dataset_id": self.uid}
         response = self.client.post(path=URL_PATH, body=request)
         logger.info(response)
+        return response
 
     def add_row(self, type: str, **kwargs):
         row = RowInitializer(type)
