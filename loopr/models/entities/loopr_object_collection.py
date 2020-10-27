@@ -1,6 +1,6 @@
 from loguru import logger
 
-_PAGE_SIZE = 2
+_PAGE_SIZE = 20
 
 
 class LooprObjectCollection:

@@ -1,5 +1,3 @@
-from loguru import logger
-
 from loopr.api.row import RowInitializer
 from loopr.models.entities.data_types import Field
 from loopr.models.entities.loopr_object import LooprObject
@@ -18,8 +16,7 @@ class Dataset(LooprObject):
         URL_PATH = "dataset.delete"
         request = {"dataset_id": self.uid}
         response = self.client.post(path=URL_PATH, body=request)
-        logger.info(response)
-        return response
+        return response["successful"]
 
     def add_row(self, type: str, **kwargs):
         row = RowInitializer(type)
