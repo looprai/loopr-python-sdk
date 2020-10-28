@@ -1,4 +1,3 @@
-from loopr.api.row import RowInitializer
 from loopr.models.entities.data_types import Field
 from loopr.models.entities.loopr_object import LooprObject
 
@@ -17,13 +16,6 @@ class Dataset(LooprObject):
         request = {"dataset_id": self.uid}
         response = self.client.post(path=URL_PATH, body=request)
         return response["successful"]
-
-    def add_row(self, type: str, **kwargs):
-        row = RowInitializer(type)
-        URL_PATH = f"row.{type}.create"
-        request = {"dataset_id": self.uid, **kwargs}
-        response = self.client.post(path=URL_PATH, body=request)
-        return row._add_row_instance(self, **response)
 
     def delete_rows(self, row_ids: list):
         URL_PATH = "row.delete"
