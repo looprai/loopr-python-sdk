@@ -24,3 +24,9 @@ class Dataset(LooprObject):
         request = {"dataset_id": self.uid, **kwargs}
         response = self.client.post(path=URL_PATH, body=request)
         return row._add_row_instance(self, **response)
+
+    def delete_rows(self, row_ids: list):
+        URL_PATH = "row.delete"
+        request = {"dataset_id": self.uid, "row_ids": row_ids}
+        response = self.client.post(path=URL_PATH, body=request)
+        return response
