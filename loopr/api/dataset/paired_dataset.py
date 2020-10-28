@@ -8,9 +8,11 @@ class PairedDataset(Dataset, AbsDataset):
     def _create_dataset_instance(client, **kwargs):
         return PairedDataset(client, kwargs)
 
-    def add_row(self, **kwargs):
+    def add_row(self, data, **kwargs):
         row = RowInitializer("image")
         URL_PATH = "row.paired.create"
-        request = {"dataset_id": self.uid, **kwargs}
+        request = {"dataset_id": self.uid, "data": data ** kwargs}
         response = self.client.post(path=URL_PATH, body=request)
-        return row._add_row_instance(self.client, **response)
+        return row._add_row_instance(
+            self.client, **{**response, "dataset_id": self.uid}
+        )

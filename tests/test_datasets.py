@@ -60,4 +60,4 @@ class TestDataset:
                 "-43aa-abb9-5a3095f88edc"
             },
         )
-        assert row.successful == True
+        assert row.dataset_id == dataset.uid

@@ -8,5 +8,5 @@ class AbsDataset(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def add_row(client, **kwargs):
+    def add_row(client, data, **kwargs):
         pass

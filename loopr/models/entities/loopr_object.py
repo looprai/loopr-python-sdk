@@ -22,17 +22,16 @@ class LooprObject(LooprEntity):
                 else:
                     value = field_values[field.name]
             except KeyError as key_error:
-                logger.warning(key_error)
-                continue
+                value = None
+                logger.debug(key_error)
             if field.field_type == Field.Type.DateTime and value is not None:
                 try:
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
                     value = value.replace(tzinfo=timezone.utc)
                 except ValueError:
                     logger.warning(
-                        "Failed to convert value '%s' to datetime for " "field %s",
-                        value,
-                        field,
+                        f"Failed to convert value {value} to datetime for "
+                        f"field {field}"
                     )
 
             setattr(self, field.name, value)
