@@ -6,3 +6,7 @@ class AbsDataset(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def _create_dataset_instance(client, **kwargs):
         pass
+
+    @abc.abstractmethod
+    def add_row(client, **kwargs):
+        pass
