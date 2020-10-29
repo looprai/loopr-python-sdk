@@ -5,7 +5,7 @@ Visit https://www.loopr.ai/ for more information.
 ## Requirements
 
 - Python 3.6+
-- Create an account at https://beta-app.loopr.ai/ 
+- Create an account at https://app.loopr.ai/ 
 - Get your API Key from API Keys Tab.
 
 
@@ -26,46 +26,85 @@ Prerequisite : pip
    ```python
    loopr_client = LooprClient(api_key="<your api key>")
    ```
+3. You can set a custom endpoint as well.
 
+   ```
+    export LOOPR_API_ENDPOINT = "<your endpoint>"
+   ```
+   
+   or
+   
+   you can pass the endpoint while initializing the client.
+   
+   ```python
+    loopr_client = LooprClient(api_key="<your api key>", endpoint="<your endpoint>")
+   ```
 
 ## Getting Sarted
 
 
-#### Creating a Dataset
+
+
+#### Create Project
 
 
 ```python 
-dataset =loopr_client.create_dataset(type="<type of dataset>",name="<name for dataset>", slug="<slug for dataset>")
+project = client.create_project(type="<type of project>",name="<name for project>",slug="<slug for project>", configuration={"labels": ["<list of labels>"], "attributes": ["<list of attributes>"],})
 ```
-- For instance, creating dataset for image type 
+- For instance, creating project of type "object_detection"
+
+  ```python
+    project = client.create_project(type="object_detection",name="test-loopr-project",slug="test-looprr-project", configuration={"labels": [{"name": "bird", "tool": "bbox", "color": "#000000"}], "attributes": [],})
+  ```
+  
+
+
+#### Project Config Export
+
+```python
+config_download_url =project.export_configuration()
+```
+
+
+#### Create Dataset
+
+
+```python 
+dataset = loopr_client.create_dataset(type="<type of dataset>",name="<name for dataset>", slug="<slug for dataset>")
+```
+- Creating dataset for image type 
 
   ```python
   dataset = loopr_client.create_dataset(type="image", name="mydataset", slug="mydataset")
   ```
 
-#### Adding Row
-
- ```python
- dataset.add_row(type="<dataset type>", data="<row data>")
-```
-- Adding row in image dataset
-
-  ```python
-    dataset.add_row(type="image", data={"image_url" : "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
-  ```
-
-#### Deleting Dataset
+#### Delete Dataset
 
 ```python
 dataset.delete()
 ```
-- Deleting image dataset
+  
+
+#### Add Row
+
+ ```python
+ row = dataset.add_row(type="<dataset type>", data="<row data>")
+```
+- Adding row in image dataset
 
   ```python
-    dataset.delete()
+    row = dataset.add_row(type="image", data={"image_url" : "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
   ```
-  
-#### Deleting Rows
+
+
+#### Delete Row
+
+ ```python
+ row.delete()
+```
+
+
+#### Bulk Row Delete
 
 ```python
 dataset.delete_rows(row_ids = ["list of row ids"])
@@ -76,3 +115,12 @@ dataset.delete_rows(row_ids = ["list of row ids"])
   ```python
     dataset.delete_rows(["row_id1", "row_id2"])
   ```
+  
+  
+#### List Datasets
+
+```python
+datasets = client.get_datasets()
+for dataset in datasets:
+    print(dataset)
+```
