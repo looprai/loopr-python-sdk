@@ -4,7 +4,6 @@ from loopr.models.entities.loopr_object import LooprObject
 
 class Project(LooprObject):
     entity_type = "project"
-    project_slug = Field.String("project_slug")
     project_name = Field.String("project_name")
     project_type = Field.String("project_type")
 
@@ -12,7 +11,7 @@ class Project(LooprObject):
         URL_PATH = "project.delete"
         request = {"project_id": self.uid}
         response = self.client.post(path=URL_PATH, body=request)
-        return response["status"]
+        return response["message"]
 
     def export_configuration(
         self,

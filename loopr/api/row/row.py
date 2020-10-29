@@ -4,13 +4,10 @@ from loopr.models.entities.loopr_object import LooprObject
 
 class Row(LooprObject):
     entity_type = "row"
-    row_id = Field.String("row_id")
-    data = Field.String("data")
-    successful = Field.String("successful")
+    dataset_id = Field.String("dataset_id")
 
-    def delete(self, row_ids: list, dataset_id: str):
+    def delete(self):
         URL_PATH = "row.delete"
-        request = {"dataset_id": dataset_id, "row_ids": row_ids}
+        request = {"dataset_id": self.dataset_id, "row_ids": [self.uid]}
         response = self.client.post(path=URL_PATH, body=request)
-        return response
-        # logger.info(response)
+        return response["message"]
