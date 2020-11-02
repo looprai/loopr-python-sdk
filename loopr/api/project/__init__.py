@@ -5,6 +5,15 @@ from loopr.resources.constants import INVALID_PROJECT_TYPE
 
 
 def ProjectInitializer(project_type):
+    """
+    Initialize the Project Object with given project_type. (relevancy/object_detection)
+
+    Args:
+        project_type (str): DataType of project.
+
+    Response:
+        It will return an instance of project of given type.
+    """
     try:
         projects = {
             "relevancy": RelevancyProject,

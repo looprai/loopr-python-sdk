@@ -5,6 +5,15 @@ from loopr.resources.constants import INVALID_DATASET_TYPE
 
 
 def DatasetInitializer(dataset_type):
+    """
+    Initialize the Dataset Object with given datatype. (image/paired)
+
+    Args:
+        dataset_type (str): DataType of dataset.
+
+    Response:
+        It will return an instance of given type of dataset.
+    """
     try:
         datasets = {
             "image": ImageDataset,
