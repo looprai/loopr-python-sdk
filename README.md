@@ -65,6 +65,13 @@ project = client.create_project(type="<type of project>",name="<name for project
 config_download_url =project.export_configuration()
 ```
 
+#### Delete Project
+
+```python
+project.delete()
+```
+
+
 
 #### Create Dataset
 
@@ -88,12 +95,17 @@ dataset.delete()
 #### Add Row
 
  ```python
- row = dataset.add_row(type="<dataset type>", data="<row data>")
+ row = dataset.add_row(data="<row data>")
 ```
 - Adding row in image dataset
 
   ```python
-    row = dataset.add_row(type="image", data={"image_url" : "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
+    row = dataset.add_row(data={"image_url" : "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
+  ```
+- Adding row in paired dataset (TextImage)
+
+  ```python
+    row = dataset.add_row(query={"text":"query"}, data={"image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
   ```
 
 
