@@ -5,6 +5,15 @@ from loopr.resources.constants import INVALID_ROW_TYPE
 
 
 def RowInitializer(dataset_type):
+    """
+    Initialize the Row Object with given dataset_type.
+
+    Args:
+        dataset_type (str): DataType of dataset. (image/paired)
+
+    Response:
+        It will return an instance of row of given type.
+    """
     try:
         rows = {
             "image": ImageRow,

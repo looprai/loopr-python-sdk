@@ -2,6 +2,10 @@ from enum import Enum, auto
 
 
 class Field:
+    """
+    Data Types
+    """
+
     class Type(Enum):
         Int = auto()
         Float = auto()

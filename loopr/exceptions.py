@@ -1,5 +1,14 @@
 class LooprError(Exception):
+    """
+    Base Class For Exception.
+    """
+
     def __init__(self, error_message, reason=None):
+        """
+        Args:
+            error_message (str): Error Message about the exception.
+            reason (str): Reason that cause the exception.
+        """
         super().__init__(error_message, reason)
         self.message = error_message
         self.reason = reason
@@ -9,20 +18,20 @@ class LooprError(Exception):
 
 
 class LooprAuthenticationError(LooprError):
-    pass
+    """Raised when API KEY fails Authentication """
 
 
 class LooprInternalServerError(LooprError):
-    pass
+    """Raised when the Loopr Server encounters an unexpected condition """
 
 
 class LooprAuthorizationError(LooprError):
-    pass
+    """Raised when a user is unauthorized to perform a particular task """
 
 
 class LooprInvalidResourceError(LooprError):
-    pass
+    """Raised when there is invalid resource """
 
 
 class LooprInvalidAttributeError(LooprError):
-    pass
+    """Raised when there is invalid attribute"""

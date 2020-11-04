@@ -15,8 +15,21 @@ from loopr.utils.retry import retry
 
 
 class LooprClient:
-    def __init__(self, api_key=None, endpoint=DEFAULT_API_ENDPOINT):
+    """
+    This is the Loopr Client. This Client is used to initialize API key and Endpoint
+    which are necessary to connect to the Loopr Server.
+    """
 
+    def __init__(self, api_key=None, endpoint=DEFAULT_API_ENDPOINT):
+        """
+        Creates and Initialize Loopr Client.
+        >>> client = LooprClient(api_key="<api_key>")
+        Args:
+            api_key (str): API_KEY can provided at the time of initializing the client.
+                If None, environment variable "LOOPR_API_KEY" will be used.
+
+            endpoint (str): Default API Endpoint of Loopr Server.
+        """
         if api_key is None:
             if _LOOPR_API_KEY not in os.environ:
                 raise LooprAuthenticationError(INVALID_LOOPR_KEY)
@@ -53,6 +66,19 @@ class LooprClient:
     def create_dataset(
         self, type: str, name: str, slug: str, description: str = "", **kwargs
     ):
+        """
+        Create a Dataset of given name and type.
+        >>> dataset = client.create_dataset(type="image",name="loopr-test-dataset",slug="loopr-test-slug")
+
+        Args:
+            type (str): Type of Dataset (image/paired).
+            name (str): Name of Dataset.
+            slug (str): Slug of Dataset.
+            description (str): Description for Dataset. (Optional)
+
+        Response:
+            On successful creation it return a Dataset Object.
+        """
         dataset = DatasetInitializer(type)
         URL_PATH = f"dataset.{type}.create"
         response = self.post(
@@ -62,6 +88,13 @@ class LooprClient:
         return dataset._create_dataset_instance(self, **response)
 
     def get_datasets(self):
+        """
+        List all Datasets.
+        >>> client.get_datasets()
+
+        Response:
+            Returns all datasets.
+        """
         URL_PATH = "dataset.list"
         return LooprObjectCollection(self, URL_PATH, "space_dataset_list", Dataset)
 
@@ -75,6 +108,21 @@ class LooprClient:
         review: bool = False,
         **kwargs,
     ):
+        """
+        Create Project.
+        >>> client.create_project(type="object_detection",name="test-loopr-project",slug="test-looprr-project",
+        >>>                       configuration={"labels": [{"name": "bird", "tool": "bbox", "color": "#000000"}],"attributes": [],})
+
+        Args:
+            type (str): Type of Project. (object_detection/relevancy)
+            name (str): Name of Project.
+            slug (str): Slug of Project.
+            review (bool) : Either reviews are allowed or not. By default review = false. (true/false)
+            vote (int) : Number of times a data can be annotated by different annotators.
+
+        Response:
+            On successful creation it returns a Project Object.
+        """
         project = ProjectInitializer(type)
         URL_PATH = f"project.{type.replace('_','.')}.create"
         response = self.post(

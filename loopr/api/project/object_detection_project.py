@@ -3,6 +3,8 @@ from loopr.api.project.project import Project
 
 
 class ObjectDetectionProject(Project, AbsProject):
+    """Object Detection Project"""
+
     @staticmethod
     def _create_project_instance(client, **kwargs):
         return ObjectDetectionProject(client, kwargs)
