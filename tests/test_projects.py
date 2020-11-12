@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 import pytest
 import requests
@@ -7,6 +8,8 @@ from loopr.api.project.project import Project
 from loopr.client import LooprClient
 from loopr.exceptions import LooprInvalidResourceError
 from tests.testing_helpers import (
+    TEST_CATEGORIZATION_PROJECT_CONFIG,
+    TEST_CATEGORIZATION_PROJECT_TYPE,
     TEST_OBJECT_DETECTION_PROJECT_CONFIG,
     TEST_OBJECT_DETECTION_PROJECT_TYPE,
     TEST_RELEVANCY_PROJECT_CONFIG,
@@ -37,6 +40,13 @@ class TestProject:
                     },
                 },
             ),
+            (
+                {
+                    "project_type": TEST_CATEGORIZATION_PROJECT_TYPE,
+                    "configuration": TEST_CATEGORIZATION_PROJECT_CONFIG,
+                    "dataset_type": "image",
+                },
+            ),
         ],
     )
     def test_project_creation_deletion(self, client: LooprClient, test_input):
@@ -49,7 +59,15 @@ class TestProject:
             dataset_type=test_input[0]["dataset_type"],
         )
         project.delete()
+        assert project.uid == project.to_dict()["uid"]
         assert project.project_name == project_name
+        with pytest.raises(LooprInvalidResourceError):
+            client.create_project(
+                project_type="invalid_type",
+                project_name=project_name,
+                configuration=test_input[0]["configuration"],
+                dataset_type=test_input[0]["dataset_type"],
+            )
         with pytest.raises(LooprInvalidResourceError):
             project.delete()
 
@@ -74,3 +92,25 @@ class TestProject:
     def test_get_project_info_slug(self, client: LooprClient, project: Project):
         response = client.get_project(project_slug=project.project_slug)
         assert response.project_name == project.project_name
+
+    @pytest.mark.parametrize(
+        "test_offset, test_filter",
+        [
+            (0, {}),
+            (
+                0,
+                {
+                    "start_date": datetime.now(),
+                    "end_date": datetime.now(),
+                },
+            ),
+        ],
+    )
+    def test_get_annotation(
+        self, client: LooprClient, test_offset, test_filter, project: Project
+    ):
+        annotations = [
+            annotation
+            for annotation in project.get_annotations(offset=test_offset, **test_filter)
+        ]
+        assert len(annotations) == 0

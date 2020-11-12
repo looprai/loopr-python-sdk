@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "loopr"
-version = "0.1.2"
+version = "0.1.0"
 description = "A python sdk to interact with loopR APIs."
 authors = ["LoopR"]
 
@@ -9,6 +9,7 @@ python = "^3.6"
 loguru = "^0.5.3"
 python-dotenv = "^0.14.0"
 requests = "^2.24.0"
+python-dateutil = "^2.8.1"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.6.4"
@@ -20,6 +21,7 @@ coverage = "^5.3"
 flake8 = "^3.8.4"
 pytest = "^6.1.1"
 pytest-cov = "^2.10.1"
+Sphinx = "^3.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

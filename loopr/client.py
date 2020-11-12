@@ -4,14 +4,12 @@ import requests
 from loguru import logger
 
 from loopr import _LOOPR_API_ENDPOINT, _LOOPR_API_KEY, DEFAULT_API_ENDPOINT
-from loopr.api.dataset import DatasetInitializer
-from loopr.api.dataset.dataset import Dataset
-from loopr.api.project import ProjectInitializer
-from loopr.api.project.project import Project
+from loopr.api.dataset import dataset_initializer
+from loopr.api.project import project_initializer
 from loopr.exceptions import LooprAuthenticationError, LooprInternalServerError
 from loopr.models.entities.loopr_object_collection import LooprObjectCollection
 from loopr.resources.constants import INVALID_LOOPR_KEY
-from loopr.utils.common_utils import slug_create
+from loopr.utils.common_utils import encode_dict, slug_create
 from loopr.utils.response_handler import response_handler
 from loopr.utils.retry import retry
 
@@ -52,8 +50,7 @@ class LooprClient:
     @retry(exception=LooprInternalServerError)
     @response_handler
     def get(self, path: str, params: dict):
-        logger.info(self.endpoint + path)
-        logger.info(params)
+        params = encode_dict(params)
         res = requests.get(
             url=self.endpoint + path, params=params, headers=self.headers
         )
@@ -62,6 +59,7 @@ class LooprClient:
     @retry(exception=LooprInternalServerError)
     @response_handler
     def post(self, path: str, body: dict):
+        body = encode_dict(body)
         res = requests.post(url=self.endpoint + path, json=body, headers=self.headers)
         return res
 
@@ -93,10 +91,10 @@ class LooprClient:
         Response:
             On successful creation it return a Dataset Object.
         """
-        dataset = DatasetInitializer(dataset_type)
-        URL_PATH = f"dataset.{dataset_type}.create"
         if dataset_slug is None:
             dataset_slug = slug_create(dataset_name)
+        dataset = dataset_initializer(dataset_type)
+        URL_PATH = f"dataset.{dataset_type}.create"
         response = self.post(
             path=URL_PATH,
             body={
@@ -117,21 +115,23 @@ class LooprClient:
             Returns all datasets.
         """
         URL_PATH = "dataset.list"
-        return LooprObjectCollection(self, URL_PATH, "space_dataset_list", Dataset)
+        return LooprObjectCollection(
+            self, URL_PATH, "space_dataset_list", dataset_initializer
+        )
 
     def create_project(
         self,
         project_type: str,
         project_name: str,
-        project_slug: str,
         configuration: dict,
+        project_slug: str = None,
         vote: int = 1,
         review: bool = False,
         **kwargs,
     ):
         """
         Create Project.
-        >>> client.create_project(type="object_detection",name="test-loopr-project",slug="test-looprr-project",
+        >>> client.create_project(type="object_detection",name="test-loopr-project",
         >>>                       configuration={"labels": [{"name": "bird", "tool": "bbox", "color": "#000000"}],"attributes": [],})
 
         Args:
@@ -164,7 +164,9 @@ class LooprClient:
         Response:
             On successful creation it returns a Project Object.
         """
-        project = ProjectInitializer(project_type)
+        if project_slug is None:
+            project_slug = slug_create(project_name)
+        project = project_initializer(project_type)
         URL_PATH = f"project.{project_type.replace('_','.')}.create"
         response = self.post(
             path=URL_PATH,
@@ -188,7 +190,9 @@ class LooprClient:
             Returns all projects.
         """
         URL_PATH = "project.list"
-        return LooprObjectCollection(self, URL_PATH, "projects_list", Project)
+        return LooprObjectCollection(
+            self, URL_PATH, "projects_list", project_initializer
+        )
 
     def get_project(self, project_id: str = None, project_slug: str = None):
 
@@ -212,7 +216,7 @@ class LooprClient:
             path=URL_PATH,
             params=request,
         )
-        project = ProjectInitializer(response["project_type"])
+        project = project_initializer(response["project_type"])
         return project._create_project_instance(self, **response)
 
     def get_dataset(self, dataset_id: str = None, dataset_slug: str = None):
@@ -237,5 +241,5 @@ class LooprClient:
             path=URL_PATH,
             params=request,
         )
-        dataset = DatasetInitializer(response["dataset_type"])
+        dataset = dataset_initializer(response["dataset_type"])
         return dataset._create_dataset_instance(self, **response)

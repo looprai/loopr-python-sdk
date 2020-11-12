@@ -4,22 +4,32 @@ from loopr.exceptions import LooprInvalidResourceError
 from loopr.resources.constants import INVALID_ROW_TYPE
 
 
-def RowInitializer(dataset_type):
-    """
-    Initialize the Row Object with given dataset_type.
+class RowInitializer:
+    type = "row"
 
-    Args:
-        dataset_type (str): DataType of dataset. (image/paired)
+    @classmethod
+    def type_name(cls):
+        return cls.type
 
-    Response:
-        It will return an instance of row of given type.
-    """
-    try:
-        rows = {
-            "image": ImageRow,
-            "paired": PairedRow,
-        }
+    def __call__(self, dataset_type):
+        """
+        Initialize the Row Object with given dataset_type.
 
-        return rows[dataset_type]
-    except KeyError:
-        raise LooprInvalidResourceError(INVALID_ROW_TYPE)
+        Args:
+            dataset_type (str): DataType of dataset. (image/paired)
+
+        Response:
+            It will return an instance of row of given type.
+        """
+        try:
+            rows = {
+                "image": ImageRow,
+                "paired": PairedRow,
+            }
+
+            return rows[dataset_type]
+        except KeyError:
+            raise LooprInvalidResourceError(INVALID_ROW_TYPE)
+
+
+row_initializer = RowInitializer()

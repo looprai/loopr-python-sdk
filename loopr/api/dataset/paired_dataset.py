@@ -1,6 +1,6 @@
 from loopr.api.dataset.abs_dataset import AbsDataset
 from loopr.api.dataset.dataset import Dataset
-from loopr.api.row import RowInitializer
+from loopr.api.row import row_initializer
 
 
 class PairedDataset(Dataset, AbsDataset):
@@ -36,7 +36,7 @@ class PairedDataset(Dataset, AbsDataset):
             Returns a Paired Row Object.
 
         """
-        row = RowInitializer("paired")
+        row = row_initializer("paired")
         URL_PATH = "row.paired.create"
         request = {"dataset_id": self.uid, **kwargs}
         response = self.client.post(path=URL_PATH, body=request)

@@ -1,5 +1,4 @@
 import pytest
-from loguru import logger
 
 from loopr.api.dataset.dataset import Dataset
 from loopr.client import LooprClient
@@ -34,7 +33,6 @@ class TestDataset:
     def test_dataset_creation_deletion(self, client: LooprClient, test_input):
 
         dataset_name = "test-dataset-" + random_generator()
-        logger.info(dataset_name)
         dataset = client.create_dataset(
             dataset_type=test_input[0]["dataset_type"],
             dataset_name=dataset_name,
@@ -42,7 +40,14 @@ class TestDataset:
             paired_type=test_input[0]["paired_type"],
         )
         dataset.delete()
+        assert dataset.uid == dataset.to_dict()["uid"]
         assert dataset.dataset_name == dataset_name
+        with pytest.raises(LooprInvalidResourceError):
+            client.create_dataset(
+                dataset_type="invalid_type",
+                dataset_name=dataset_name,
+                paired_type=test_input[0]["paired_type"],
+            )
         with pytest.raises(LooprInvalidResourceError):
             dataset.delete()
 

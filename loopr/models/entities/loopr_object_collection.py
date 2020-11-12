@@ -1,6 +1,10 @@
 from loguru import logger
 
-_PAGE_SIZE = 20
+from loopr.exceptions import LooprInvalidResourceError
+
+_PAGE_SIZE = 10
+
+OBJ_TYPE = ["project", "dataset"]
 
 
 class LooprObjectCollection:
@@ -36,7 +40,18 @@ class LooprObjectCollection:
             response = response[self.deref_key]
             logger.info("fetched result %s", len(response))
             self._fetched_pages += 1
-            page_data = [self.obj_class(self.client, result) for result in response]
+            page_data = []
+            for result in response:
+                if self.obj_class.type_name() in OBJ_TYPE:
+                    try:
+                        loopr_object = self.obj_class(
+                            result[self.obj_class.type_name() + "_type"]
+                        )(self.client, result)
+                        page_data.append(loopr_object)
+                    except LooprInvalidResourceError:
+                        continue
+                else:
+                    page_data.append(self.obj_class(self.client, result))
             self._data.extend(page_data)
 
             if len(page_data) < _PAGE_SIZE:
