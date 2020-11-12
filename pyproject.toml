@@ -3,6 +3,8 @@ name = "loopr"
 version = "0.1.0"
 description = "A python sdk to interact with loopR APIs."
 authors = ["LoopR"]
+license = "MIT"
+documentation = "https://loopr.readthedocs.io/en/latest/index.html"
 
 [tool.poetry.dependencies]
 python = "^3.6"
