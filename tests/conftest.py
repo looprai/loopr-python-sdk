@@ -8,6 +8,7 @@ from tests.testing_helpers import (
     TEST_IMAGE_DATASET_TYPE,
     TEST_OBJECT_DETECTION_PROJECT_CONFIG,
     TEST_OBJECT_DETECTION_PROJECT_TYPE,
+    TEST_PAIRED_DATASET_TYPE,
     random_generator,
 )
 
@@ -69,3 +70,16 @@ def project(client: LooprClient):
     )
     yield project
     project.delete()
+
+
+@pytest.fixture(scope="class")
+def dataset_paired(client: LooprClient):
+    name = "test-paired-" + random_generator()
+    dataset_paired = client.create_dataset(
+        name=name,
+        slug=name,
+        type=TEST_PAIRED_DATASET_TYPE,
+        paired_type={"query": "text", "data": "image"},
+    )
+    yield dataset_paired
+    dataset_paired.delete()
