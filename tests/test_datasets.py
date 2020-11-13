@@ -5,6 +5,7 @@ from loopr.api.dataset.dataset import Dataset
 from loopr.client import LooprClient
 from loopr.exceptions import LooprInvalidResourceError
 from tests.testing_helpers import (
+    PREDICTIONS,
     TEST_IMAGE_DATASET_TYPE,
     TEST_PAIRED_DATASET_TYPE,
     random_generator,
@@ -67,50 +68,39 @@ class TestDataset:
                     "data": {
                         "image_url": "gs://loopr-dev-payloads/a7e9b922-f8d5"
                         "-43aa-abb9-5a3095f88edc",
-                        "predictions": [
-                            {"tool": "point", "coordinates": [{"x": 109.0, "y": 99}]},
-                            {
-                                "tool": "bbox",
-                                "coordinates": {
-                                    "x_top_left": 191,
-                                    "y_top_left": 92,
-                                    "width": 105,
-                                    "height": 92,
-                                },
-                            },
-                            {
-                                "tool": "line",
-                                "coordinates": [
-                                    {"x": 279, "y": 263},
-                                    {"x": 555, "y": 211},
-                                ],
-                            },
-                            {
-                                "tool": "polygon",
-                                "coordinates": [
-                                    {"x": 161.0, "y": 338.0},
-                                    {"x": 273.0, "y": 311.0},
-                                    {"x": 195.0, "y": 252.0},
-                                ],
-                            },
-                            {
-                                "tool": "polyline",
-                                "coordinates": [
-                                    {"x": 511, "y": 355},
-                                    {"x": 418, "y": 460},
-                                    {"x": 649, "y": 373},
-                                    {"x": 519, "y": 356},
-                                    {"x": 573, "y": 291},
-                                ],
-                            },
-                        ],
+                        "predictions": PREDICTIONS,
                     },
                 },
             ),
         ],
     )
-    def test_dataset_add_row(self, dataset: Dataset, test_input):
+    def test_dataset_add_row_and_delete(self, dataset: Dataset, test_input):
         row = dataset.add_row(
-            type=test_input[0]["dataset_type"], data=test_input[0]["data"]
+            type=test_input[0]["dataset_type"],
+            data=test_input[0]["data"],
         )
+        dataset.delete_rows([row.uid])
         assert row.dataset_id == dataset.uid
+
+    @pytest.mark.parametrize(
+        "test_input",
+        [
+            (
+                {
+                    "dataset_type": TEST_PAIRED_DATASET_TYPE,
+                    "data": {"image": "gs://loopr-dev-payloads/a7e9b922-f8d5"},
+                    "query": {"text": "HELLO"},
+                },
+            ),
+        ],
+    )
+    def test_dataset_add_row_paired_and_delete(
+        self, dataset_paired: Dataset, test_input
+    ):
+        row = dataset_paired.add_row(
+            type=test_input[0]["dataset_type"],
+            data=test_input[0]["data"],
+            query=test_input[0]["query"],
+        )
+        dataset_paired.delete_rows([row.uid])
+        assert row.dataset_id == dataset_paired.uid

@@ -10,6 +10,7 @@ from loopr.api.project import ProjectInitializer
 from loopr.exceptions import LooprAuthenticationError, LooprInternalServerError
 from loopr.models.entities.loopr_object_collection import LooprObjectCollection
 from loopr.resources.constants import INVALID_LOOPR_KEY
+from loopr.utils.common_utils import slug_create
 from loopr.utils.response_handler import response_handler
 from loopr.utils.retry import retry
 
@@ -64,7 +65,7 @@ class LooprClient:
         return res
 
     def create_dataset(
-        self, type: str, name: str, slug: str, description: str = "", **kwargs
+        self, type: str, name: str, slug: str = None, description: str = "", **kwargs
     ):
         """
         Create a Dataset of given name and type.
@@ -81,6 +82,8 @@ class LooprClient:
         """
         dataset = DatasetInitializer(type)
         URL_PATH = f"dataset.{type}.create"
+        if slug is None:
+            slug = slug_create(name)
         response = self.post(
             path=URL_PATH,
             body={"name": name, "slug": slug, "description": description, **kwargs},
@@ -117,8 +120,28 @@ class LooprClient:
             type (str): Type of Project. (object_detection/relevancy)
             name (str): Name of Project.
             slug (str): Slug of Project.
-            review (bool) : Either reviews are allowed or not. By default review = false. (true/false)
-            vote (int) : Number of times a data can be annotated by different annotators.
+            review (bool): Either reviews are allowed or not. By default review = false. (true/false)
+            vote (int): Number of times a data can be annotated by different annotators.
+            configuration (dict): Configuration consists of information regarding the tools used for annotation.
+
+                Configuration consists of following :
+                    - labels : It consists of label_name, type of tool and color.
+                    - attributes : It consists of properties that are attached to different labels.
+
+                Type of tools :
+                    - Point
+                    - Bounding Box
+                    - Line
+                    - Polygon
+                    - Polyline
+
+                Color :
+                    Here color describes the color of the selected tool. It can be in hex(#FF0000) or rgb(rgb(255, 0, 0)) format.
+
+                For instance :
+                    {"configuration": {"labels": [{"name": "car", "tool": "bbox", "color": "#FC7460"}], "attributes": [{"name": "Visibility", "description": "", "conditions": {"label_conditions": {"labels": ["car"]}},
+                                                                                                        "required": true, "type": "categorical", "choices": ["Full View", "Partial View"], "is_multi": false},]}}
+
 
         Response:
             On successful creation it returns a Project Object.
