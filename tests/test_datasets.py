@@ -53,6 +53,10 @@ class TestDataset:
             datasets_name.append(dataset.dataset_name)
         assert dataset.dataset_name in datasets_name
 
+    def test_get_dataset(self, client: LooprClient, dataset: Dataset):
+        dataset_info = client.get_dataset(dataset.uid)
+        assert dataset.uid == dataset_info["dataset_id"]
+
     @pytest.mark.parametrize(
         "test_input",
         [
