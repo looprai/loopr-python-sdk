@@ -7,6 +7,7 @@ from loopr import _LOOPR_API_ENDPOINT, _LOOPR_API_KEY, DEFAULT_API_ENDPOINT
 from loopr.api.dataset import DatasetInitializer
 from loopr.api.dataset.dataset import Dataset
 from loopr.api.project import ProjectInitializer
+from loopr.api.project.project import Project
 from loopr.exceptions import LooprAuthenticationError, LooprInternalServerError
 from loopr.models.entities.loopr_object_collection import LooprObjectCollection
 from loopr.resources.constants import INVALID_LOOPR_KEY
@@ -160,3 +161,14 @@ class LooprClient:
             },
         )
         return project._create_project_instance(self, **response)
+
+    def get_projects(self):
+        """
+        List all Projects.
+        >>> client.get_projects()
+
+        Response:
+            Returns all projects.
+        """
+        URL_PATH = "project.list"
+        return LooprObjectCollection(self, URL_PATH, "projects_list", Project)
