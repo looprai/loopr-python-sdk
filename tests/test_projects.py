@@ -59,3 +59,10 @@ class TestProject:
         assert json.loads(response.text) == {
             "configuration": TEST_OBJECT_DETECTION_PROJECT_CONFIG
         }
+
+    def test_project_listing(self, client: LooprClient, project: Project):
+        project_name = []
+        projects = client.get_projects()
+        for project in projects:
+            project_name.append(project.project_name)
+        assert project.project_name in project_name
