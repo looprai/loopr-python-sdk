@@ -66,3 +66,7 @@ class TestProject:
         for project in projects:
             project_name.append(project.project_name)
         assert project.project_name in project_name
+
+    def test_get_project_info(self, client: LooprClient, project: Project):
+        response = client.get_project_info(project_id=project.uid)
+        assert response.project_name == project.project_name

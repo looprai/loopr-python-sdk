@@ -36,7 +36,7 @@ class PairedDataset(Dataset, AbsDataset):
             Returns a Paired Row Object.
 
         """
-        row = RowInitializer("image")
+        row = RowInitializer("paired")
         URL_PATH = "row.paired.create"
         request = {"dataset_id": self.uid, **kwargs}
         response = self.client.post(path=URL_PATH, body=request)
