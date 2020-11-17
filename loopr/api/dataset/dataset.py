@@ -15,6 +15,7 @@ class Dataset(LooprObject):
 
     entity_type = "dataset"
     dataset_name = Field.String("dataset_name")
+    dataset_slug = Field.String("dataset_slug")
     description = Field.String("description")
 
     def delete(self):
