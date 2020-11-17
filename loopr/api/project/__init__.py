@@ -18,6 +18,7 @@ def ProjectInitializer(project_type):
     try:
         projects = {
             "relevancy": RelevancyProject,
+            "search_relevancy": RelevancyProject,
             "object_detection": ObjectDetectionProject,
             "categorization": CategorizationProject,
         }
