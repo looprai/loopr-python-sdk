@@ -184,3 +184,15 @@ class LooprClient:
         )
         project = ProjectInitializer(response["project_type"])
         return project._create_project_instance(self, **response)
+
+    def get_dataset_info(self, dataset_id: str = None, dataset_slug: str = None):
+        URL_PATH = "dataset.info"
+        request = (
+            {"dataset_id": dataset_id} if dataset_id else {"dataset_slug": dataset_slug}
+        )
+        response = self.get(
+            path=URL_PATH,
+            params=request,
+        )
+        dataset = DatasetInitializer(response["dataset_type"])
+        return dataset._create_dataset_instance(self, **response)

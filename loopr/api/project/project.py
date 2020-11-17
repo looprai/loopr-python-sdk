@@ -11,6 +11,8 @@ class Project(LooprObject):
     entity_type = "project"
     project_name = Field.String("project_name")
     project_type = Field.String("project_type")
+    project_slug = Field.String("project_slug")
+    description = Field.String("description")
 
     def delete(self):
         """

@@ -104,3 +104,11 @@ class TestDataset:
         )
         dataset_paired.delete_rows([row.uid])
         assert row.dataset_id == dataset_paired.uid
+
+    def test_get_dataset_info_id(self, client: LooprClient, dataset: Dataset):
+        response = client.get_dataset_info(dataset_id=dataset.uid)
+        assert response.dataset_name == dataset.dataset_name
+
+    def test_get_dataset_info_slug(self, client: LooprClient, dataset: Dataset):
+        response = client.get_dataset_info(dataset_slug=dataset.dataset_slug)
+        assert response.dataset_name == dataset.dataset_name
