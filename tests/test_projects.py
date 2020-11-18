@@ -68,9 +68,9 @@ class TestProject:
         assert project.project_name in project_name
 
     def test_get_project_info_id(self, client: LooprClient, project: Project):
-        response = client.get_project_info(project_id=project.uid)
+        response = client.get_project(project_id=project.uid)
         assert response.project_name == project.project_name
 
     def test_get_project_info_slug(self, client: LooprClient, project: Project):
-        response = client.get_project_info(project_slug=project.project_slug)
+        response = client.get_project(project_slug=project.project_slug)
         assert response.project_name == project.project_name
