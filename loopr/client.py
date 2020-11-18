@@ -66,28 +66,45 @@ class LooprClient:
         return res
 
     def create_dataset(
-        self, type: str, name: str, slug: str = None, description: str = "", **kwargs
+        self,
+        dataset_type: str,
+        dataset_name: str,
+        dataset_slug: str = None,
+        description: str = "",
+        **kwargs,
     ):
         """
         Create a Dataset of given name and type.
-        >>> dataset = client.create_dataset(type="image",name="loopr-test-dataset",slug="loopr-test-slug")
+        For Image Dataset :
+            >>> dataset = client.create_dataset(type="image",name="loopr-test-dataset",slug="loopr-test-slug")
+
+        For Paired Dataset(TextImage) :
+            >>> dataset = client.create_dataset(type="paired",name="loopr-test-dataset",slug="loopr-test-slug",paired_type={'query': 'text', 'data': 'image'})
 
         Args:
-            type (str): Type of Dataset (image/paired).
-            name (str): Name of Dataset.
-            slug (str): Slug of Dataset.
+            dataset_type (str): Type of Dataset (image/paired).
+            dataset_name (str): Name of Dataset.
+            dataset_slug (str): Slug of Dataset.
             description (str): Description for Dataset. (Optional)
+
+        Kwargs:
+            paired_type (dict): Query and Data(Result) for paired datatype.
 
         Response:
             On successful creation it return a Dataset Object.
         """
-        dataset = DatasetInitializer(type)
-        URL_PATH = f"dataset.{type}.create"
-        if slug is None:
-            slug = slug_create(name)
+        dataset = DatasetInitializer(dataset_type)
+        URL_PATH = f"dataset.{dataset_type}.create"
+        if dataset_slug is None:
+            dataset_slug = slug_create(dataset_name)
         response = self.post(
             path=URL_PATH,
-            body={"name": name, "slug": slug, "description": description, **kwargs},
+            body={
+                "name": dataset_name,
+                "slug": dataset_slug,
+                "description": description,
+                **kwargs,
+            },
         )
         return dataset._create_dataset_instance(self, **response)
 
@@ -104,9 +121,9 @@ class LooprClient:
 
     def create_project(
         self,
-        type: str,
-        name: str,
-        slug: str,
+        project_type: str,
+        project_name: str,
+        project_slug: str,
         configuration: dict,
         vote: int = 1,
         review: bool = False,
@@ -147,13 +164,13 @@ class LooprClient:
         Response:
             On successful creation it returns a Project Object.
         """
-        project = ProjectInitializer(type)
-        URL_PATH = f"project.{type.replace('_','.')}.create"
+        project = ProjectInitializer(project_type)
+        URL_PATH = f"project.{project_type.replace('_','.')}.create"
         response = self.post(
             path=URL_PATH,
             body={
-                "project_name": name,
-                "slug": slug,
+                "project_name": project_name,
+                "slug": project_slug,
                 "configuration": configuration,
                 "vote": vote,
                 "review": review,
@@ -174,6 +191,19 @@ class LooprClient:
         return LooprObjectCollection(self, URL_PATH, "projects_list", Project)
 
     def get_project(self, project_id: str = None, project_slug: str = None):
+
+        """
+        Returns information about a particular project. Project Information can be fetched with the help of
+        ID or slug.
+
+        Args:
+            project_id (str): ID of the project.
+            project_slug (str): Slug of the project.
+
+        Response:
+            Returns project information like id, name, slug, project type and description.
+
+        """
         URL_PATH = "project.info"
         request = (
             {"project_id": project_id} if project_id else {"project_slug": project_slug}
@@ -185,7 +215,20 @@ class LooprClient:
         project = ProjectInitializer(response["project_type"])
         return project._create_project_instance(self, **response)
 
-    def get_dataset_info(self, dataset_id: str = None, dataset_slug: str = None):
+    def get_dataset(self, dataset_id: str = None, dataset_slug: str = None):
+        """
+        Returns information about a particular dataset. Dataset Information can be fetched with the help of
+        ID or slug.
+
+        Args:
+            dataset_id (str): ID of the dataset.
+            dataset_slug (str): Slug of the dataset.
+
+        Response:
+            Returns dataset information like id, name, slug, dataset type and description.
+
+        """
+
         URL_PATH = "dataset.info"
         request = (
             {"dataset_id": dataset_id} if dataset_id else {"dataset_slug": dataset_slug}
