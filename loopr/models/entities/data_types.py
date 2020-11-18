@@ -12,6 +12,8 @@ class Field:
         String = auto()
         Boolean = auto()
         DateTime = auto()
+        List = auto()
+        Dict = auto()
 
     @staticmethod
     def Int(*args):
@@ -32,6 +34,14 @@ class Field:
     @staticmethod
     def DateTime(*args):
         return Field(Field.Type.DateTime, *args)
+
+    @staticmethod
+    def List(*args):
+        return Field(Field.Type.List, *args)
+
+    @staticmethod
+    def Dict(*args):
+        return Field(Field.Type.Dict, *args)
 
     def __init__(self, field_type: Type, name):
         self.field_type = field_type

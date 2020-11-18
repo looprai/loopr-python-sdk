@@ -33,7 +33,6 @@ class LooprObject(LooprEntity):
                         f"Failed to convert value {value} to datetime for "
                         f"field {field}"
                     )
-
             setattr(self, field.name, value)
 
     def _get_unique_id(
@@ -59,3 +58,8 @@ class LooprObject(LooprEntity):
 
     def __hash__(self):
         return 7541 * hash(self.type_name()) + hash(self.uid)
+
+    def to_dict(self):
+        object_dict = self.__dict__.copy()
+        del object_dict["client"]
+        return object_dict

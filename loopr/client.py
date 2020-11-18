@@ -173,7 +173,7 @@ class LooprClient:
         URL_PATH = "project.list"
         return LooprObjectCollection(self, URL_PATH, "projects_list", Project)
 
-    def get_project_info(self, project_id: str = None, project_slug: str = None):
+    def get_project(self, project_id: str = None, project_slug: str = None):
         URL_PATH = "project.info"
         request = (
             {"project_id": project_id} if project_id else {"project_slug": project_slug}
