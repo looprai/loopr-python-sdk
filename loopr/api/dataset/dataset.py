@@ -24,7 +24,7 @@ class Dataset(LooprObject):
         >>> dataset.delete()
 
         Response :
-            On successful deletion "successful" message will be returned.
+            :returns "successful" message.
         """
 
         URL_PATH = "dataset.delete"
@@ -41,7 +41,7 @@ class Dataset(LooprObject):
             row_ids : A list of row ids to be deleted.
 
         Response :
-            On successful deletion "successful" message will be returned.
+            :returns "successful" message.
 
         """
 

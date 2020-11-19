@@ -22,7 +22,7 @@ class Project(LooprObject):
         >>> project.delete()
 
         Response :
-                On successful deletion "successful" will be returned.
+            :returns "successful" message.
         """
         URL_PATH = "project.delete"
         request = {"project_id": self.uid}
@@ -37,7 +37,7 @@ class Project(LooprObject):
         >>> project.export_configuration()
 
         Response:
-            Download url for the project will be returned.
+            :returns a download url for the project configuration.
         """
         URL_PATH = "project.configuration.export"
         request = {"project_id": self.uid}
