@@ -42,9 +42,9 @@ class TestProject:
     def test_project_creation_deletion(self, client: LooprClient, test_input):
         project_name = "test-project-" + random_generator()
         project = client.create_project(
-            type=test_input[0]["project_type"],
-            name=project_name,
-            slug=project_name,
+            project_type=test_input[0]["project_type"],
+            project_name=project_name,
+            project_slug=project_name,
             configuration=test_input[0]["configuration"],
             dataset_type=test_input[0]["dataset_type"],
         )

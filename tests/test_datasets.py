@@ -36,9 +36,9 @@ class TestDataset:
         dataset_name = "test-dataset-" + random_generator()
         logger.info(dataset_name)
         dataset = client.create_dataset(
-            type=test_input[0]["dataset_type"],
-            name=dataset_name,
-            slug=dataset_name,
+            dataset_type=test_input[0]["dataset_type"],
+            dataset_name=dataset_name,
+            dataset_slug=dataset_name,
             paired_type=test_input[0]["paired_type"],
         )
         dataset.delete()
@@ -106,9 +106,9 @@ class TestDataset:
         assert row.dataset_id == dataset_paired.uid
 
     def test_get_dataset_info_id(self, client: LooprClient, dataset: Dataset):
-        response = client.get_dataset_info(dataset_id=dataset.uid)
+        response = client.get_dataset(dataset_id=dataset.uid)
         assert response.dataset_name == dataset.dataset_name
 
     def test_get_dataset_info_slug(self, client: LooprClient, dataset: Dataset):
-        response = client.get_dataset_info(dataset_slug=dataset.dataset_slug)
+        response = client.get_dataset(dataset_slug=dataset.dataset_slug)
         assert response.dataset_name == dataset.dataset_name

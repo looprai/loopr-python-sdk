@@ -51,9 +51,9 @@ def client(testing_api_key: str, testing_url: str):
 def dataset(client: LooprClient):
     name = "test-dataset-" + random_generator()
     dataset = client.create_dataset(
-        name=name,
-        slug=name,
-        type=TEST_IMAGE_DATASET_TYPE,
+        dataset_name=name,
+        dataset_slug=name,
+        dataset_type=TEST_IMAGE_DATASET_TYPE,
     )
     yield dataset
     dataset.delete()
@@ -63,9 +63,9 @@ def dataset(client: LooprClient):
 def project(client: LooprClient):
     name = "test-project-" + random_generator()
     project = client.create_project(
-        name=name,
-        slug=name,
-        type=TEST_OBJECT_DETECTION_PROJECT_TYPE,
+        project_name=name,
+        project_slug=name,
+        project_type=TEST_OBJECT_DETECTION_PROJECT_TYPE,
         configuration=TEST_OBJECT_DETECTION_PROJECT_CONFIG,
     )
     yield project
@@ -76,9 +76,9 @@ def project(client: LooprClient):
 def dataset_paired(client: LooprClient):
     name = "test-paired-" + random_generator()
     dataset_paired = client.create_dataset(
-        name=name,
-        slug=name,
-        type=TEST_PAIRED_DATASET_TYPE,
+        dataset_name=name,
+        dataset_slug=name,
+        dataset_type=TEST_PAIRED_DATASET_TYPE,
         paired_type={"query": "text", "data": "image"},
     )
     yield dataset_paired
