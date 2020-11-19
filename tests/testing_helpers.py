@@ -5,6 +5,7 @@ TEST_IMAGE_DATASET_TYPE = "image"
 TEST_PAIRED_DATASET_TYPE = "paired"
 TEST_OBJECT_DETECTION_PROJECT_TYPE = "object_detection"
 TEST_RELEVANCY_PROJECT_TYPE = "relevancy"
+TEST_CATEGORIZATION_PROJECT_TYPE = "categorization"
 TEST_OBJECT_DETECTION_PROJECT_CONFIG = {
     "labels": [{"name": "bird", "tool": "bbox", "color": "#000000"}],
     "attributes": [],
@@ -13,7 +14,17 @@ TEST_RELEVANCY_PROJECT_CONFIG = {
     "question": "string",
     "choices": [{"score": 0, "description": "string"}],
 }
-
+TEST_CATEGORIZATION_PROJECT_CONFIG = {
+    "taxonomies": [
+        {
+            "name": "question_id",
+            "description": "question",
+            "type": "categorical",
+            "choices": [{"name": "choice", "description": None}],
+            "is_multi": True,
+        }
+    ]
+}
 PREDICTIONS = [
     {"tool": "point", "coordinates": [{"x": 109.0, "y": 99}]},
     {

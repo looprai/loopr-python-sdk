@@ -1,6 +1,6 @@
 from loopr.api.dataset.abs_dataset import AbsDataset
 from loopr.api.dataset.dataset import Dataset
-from loopr.api.row import RowInitializer
+from loopr.api.row import row_initializer
 
 
 class ImageDataset(Dataset, AbsDataset):
@@ -92,7 +92,7 @@ class ImageDataset(Dataset, AbsDataset):
             Returns a Image Row Object.
 
         """
-        row = RowInitializer("image")
+        row = row_initializer("image")
         URL_PATH = "row.image.create"
         request = {"dataset_id": self.uid, **kwargs}
         response = self.client.post(path=URL_PATH, body=request)

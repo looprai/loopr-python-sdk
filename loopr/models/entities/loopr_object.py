@@ -1,5 +1,6 @@
-from datetime import datetime, timezone
+from datetime import timezone
 
+from dateutil.parser import parse
 from loguru import logger
 
 from loopr.models.entities.data_types import Field
@@ -26,7 +27,7 @@ class LooprObject(LooprEntity):
                 logger.debug(key_error)
             if field.field_type == Field.Type.DateTime and value is not None:
                 try:
-                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
+                    value = parse(value)
                     value = value.replace(tzinfo=timezone.utc)
                 except ValueError:
                     logger.warning(
