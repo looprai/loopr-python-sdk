@@ -89,7 +89,7 @@ class LooprClient:
             paired_type (dict): Query and Data(Result) for paired datatype.
 
         Response:
-            On successful creation it return a Dataset Object.
+            :returns a Dataset Object.
         """
         if dataset_slug is None:
             dataset_slug = slug_create(dataset_name)
@@ -112,7 +112,7 @@ class LooprClient:
         >>> client.get_datasets()
 
         Response:
-            Returns all datasets.
+            :returns a iterable list of Datasets.
         """
         URL_PATH = "dataset.list"
         return LooprObjectCollection(
@@ -162,7 +162,7 @@ class LooprClient:
 
 
         Response:
-            On successful creation it returns a Project Object.
+            :returns a Project Object.
         """
         if project_slug is None:
             project_slug = slug_create(project_name)
@@ -187,7 +187,7 @@ class LooprClient:
         >>> client.get_projects()
 
         Response:
-            Returns all projects.
+            :returns a iterable list of Projects.
         """
         URL_PATH = "project.list"
         return LooprObjectCollection(
@@ -205,7 +205,7 @@ class LooprClient:
             project_slug (str): Slug of the project.
 
         Response:
-            Returns project information like id, name, slug, project type and description.
+            :returns project information like id, name, slug, project type and description.
 
         """
         URL_PATH = "project.info"
@@ -229,7 +229,7 @@ class LooprClient:
             dataset_slug (str): Slug of the dataset.
 
         Response:
-            Returns dataset information like id, name, slug, dataset type and description.
+            :returns dataset information like id, name, slug, dataset type and description.
 
         """
 

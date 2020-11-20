@@ -17,7 +17,7 @@ class Row(LooprObject):
         >>> row.delete()
 
         Response :
-            On successful deletion "successful" will be returned.
+            :returns "successful" message.
         """
         URL_PATH = "row.delete"
         request = {"dataset_id": self.dataset_id, "row_ids": [self.uid]}
