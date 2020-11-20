@@ -50,5 +50,5 @@ jobs:
         - 3.8
       script:
         - poetry build
-        - twine upload --skip-existing dist/* -u __token__ -p $PYPI_TOKEN
+        - twine upload --skip-existing dist/*.tar.gz -u __token__ -p $PYPI_TOKEN
 
