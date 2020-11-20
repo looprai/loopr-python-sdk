@@ -27,6 +27,8 @@ Installation & Authentication
 
    $ export LOOPR_API_KEY = "<your api key>"
 
+or
+
 .. code-block:: python
 
    from loopr.client import LooprClient
@@ -39,6 +41,8 @@ Installation & Authentication
 .. code-block:: bash
 
    $  export LOOPR_API_ENDPOINT = "<your endpoint>"
+
+or
 
 .. code-block:: python
 
@@ -108,7 +112,7 @@ Creating a Dataset
     )
     print(dataset)
 
- This prints:
+This prints:
 
 .. code-block:: text
 

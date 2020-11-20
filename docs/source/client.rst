@@ -8,27 +8,27 @@ Client
 
    :param str api_key: The API key for the space that is provided by Loopr.
    :param str endpoint: This parameter can be used to set the API endpoint of enterprise deployment. \
-                                      It's a optional parameter.
+                                      It's an optional parameter.
 
    :raises LooprAuthenticationError: If API key is not provided.
 
    |
 
-   .. py:method:: create_dataset(self, dataset_type, dataset_name, dataset_slug, description = "", **kwargs)
+   .. py:method:: create_dataset(self, dataset_type, dataset_name, dataset_slug, description= ' ', **kwargs)
 
    Creates a dataset of a given type and name in your team/space.
 
-   :param str dataset_type: The type dataset you want to create. \
+   :param str dataset_type: The type of dataset you want to create. \
                      Allowed type:\
 
                         * ``image``\
                         * ``paired``
 
    :param str dataset_name: The name of dataset which is to be created.
-   :param str dataset_slug: The slug for dataset which is to be created. It's a optional parameter.
-   :param str description: The description of the dataset. It's a optional parameter.
-   :param dict paired_type: Optional argument which is to be passed when creating ``paired`` dataset.\
-                            value should be a dictionary. ex:``{"query": "text", "data":"image'}``
+   :param str dataset_slug: The slug for dataset which is to be created. It's an optional parameter.
+   :param str description: The description of the dataset. It's an optional parameter.
+   :param dict paired_type: This argument has to be passed when creating ``paired`` dataset.\
+                            value is a dictionary. ex:``{"query": "text", "data":"image"}``
    :return: a Loopr Dataset instance
    :rtype: Dataset
 
@@ -48,7 +48,7 @@ Client
         print(image_dataset)
         print(paired_dataset)
 
-    This prints:
+This prints:
 
    .. code-block:: text
 
@@ -59,7 +59,7 @@ Client
 
    .. py:method:: get_dataset(self, dataset_id= None, dataset_slug=None)
 
-    Returns a datset instance of  particular dataset. Dataset can be fetched with the help of
+    Returns a dataset instance of  particular dataset. Dataset can be fetched with the help of
     ID or slug.
 
     :param str dataset_id: (optional) The dataset id of the dataset.
@@ -108,19 +108,19 @@ Client
 
    Creates a project of a given type, name and configuration in your team/space.
 
-   :param str project_type: The type project you want to create. \
+   :param str project_type: The type of project you want to create. \
                      Allowed type:
 
                         * ``object_detection``
                         * ``relevancy``
                         * ``categorization``
    :param str project_name: The name of project which is to be created.
-   :param str project_slug: The slug of project which is to be created. It's a optional parameter.
+   :param str project_slug: The slug of project which is to be created. It's an optional parameter.
    :param dict configuration: The config dictionary for the project.
    :param int vote: The number of time data has to be annotated. It's optional parameter.
    :param bool review: To turn on review of data after annotation. It's optional parameter.
-   :param str description: The description of the project. It's a optional parameter.
-   :param dict dataset_type: It's a optional parameter but has to be passed when creating a \
+   :param str description: The description of the project. It's an optional parameter.
+   :param dict dataset_type: It's an optional parameter but has to be passed when creating a \
                                 ``relevancy`` type project. ex: ``{"query_datatype": "text","result_datatype": "image"}``
    :return: a Loopr project instance
    :rtype: Project

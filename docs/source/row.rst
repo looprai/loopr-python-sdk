@@ -18,7 +18,7 @@ Row
 
    .. py:method:: delete(self)
 
-   This method is used to delete a row.
+    This method is used to delete a row.
 
     :return: returns successful or failure
     :rtype: str

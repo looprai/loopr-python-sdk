@@ -34,7 +34,7 @@ Project
 
    .. py:method:: delete(self)
 
-   This method is used to delete a project.
+    This method is used to delete a project.
 
     :return: returns successful or failure
     :rtype: str

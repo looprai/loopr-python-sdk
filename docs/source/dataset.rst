@@ -7,8 +7,6 @@ Dataset
     Dataset is a collection of rows containing data. One Dataset may consists of several rows.
         Type of Datasets :
             - image
-            - text
-            - sku
             - paired (text_image/image_image/text_sku/image_sku)
 
    .. py:attribute:: uid
@@ -31,8 +29,32 @@ Dataset
 
    |
 
-   .. py:method:: add_row(self, **kwargs)
+   .. py:method:: add_row(self, data: dict, external_id: str = None, **kwargs)
+
     Adds rows to dataset
+
+    :param dict data: Row data to create rows.Format of Arguments for different datatypes:
+
+                * image:
+                    ``data={"image_url":"< image_url >"}``
+                * text_image:
+                    ``query={"text":"<your query>"}, data={"image":"<image_url>"}``
+                * image_image:
+                    ``query={"image":"<your query image>"}, data={"image":"<image_url>"}``
+                * text_sku:
+                    ``query={"text":"<your query>"}, data={"sku_image":"<image_url>", "sku_name":"<name>"}``
+                * image_sku:
+                    ``query={"image":"<your query image>"}, data={"sku_image":"<image_url>", "sku_name":"<name>"}``
+
+                Prediction is an optional field that can be passed with the data dict. The format of prediction depends \
+                on different type of project.
+
+                * object_detection:
+                    ``[{"tool": "point", "coordinates": [{"x": 100, "y": 100}]}]``
+                * relevancy:
+                    ``[{"taxonomy_name":"relevancy","value":["1"]}]``
+
+    :param str external_id: (Optional) An unique field that a user can provide to represent rows.
 
     :return: returns a Row instance
     :rtype: Row
@@ -59,20 +81,21 @@ Dataset
 
    .. py:method:: delete_rows(self, row_ids)
 
-   Delete multiple rows present inside dataset.
+    Delete multiple rows present inside dataset.
 
+    :param list row_ids: The list of row_ids which is to be deleted.
     :return: returns successful or failure
     :rtype: str
 
     .. code-block:: python
 
-        dataset.delete_rows(row_ids=["< row id_1 >, < row id_2 >"])
+        dataset.delete_rows(row_ids=["< row id_1 >", "< row id_2 >"])
 
    |
 
    .. py:method:: delete(self)
 
-   This method is used to delete a dataset.
+    This method is used to delete a dataset.
 
     :return: returns successful or failure
     :rtype: str
