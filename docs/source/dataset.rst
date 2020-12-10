@@ -45,7 +45,10 @@ Dataset
                     ``query={"text":"<your query>"}, data={"sku_image":"<image_url>", "sku_name":"<name>"}``
                 * image_sku:
                     ``query={"image":"<your query image>"}, data={"sku_image":"<image_url>", "sku_name":"<name>"}``
-
+                * text:
+                    ``data={"text":"<your text>"}``
+                * sku:
+                    ``data={"sku_image":"< image_url >", "sku_name":"<your sku name>"}``
                 Prediction is an optional field that can be passed with the data dict. The format of prediction depends \
                 on different type of project.
 
@@ -65,9 +68,15 @@ Dataset
         image_row= image_dataset.add_row(data={"image_url":"gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
         paired_dataset = client.get_dataset(dataset_id="<dataset_id>")
         paired_row= image_dataset.add_row(query={"text":"query text"}, data={"sku_image": "gs://loopr-demo-dataset/test_image.jpeg","sku_name":"product name"})
+        text_dataset = client.get_dataset(dataset_id="<dataset_id>")
+        text_row = text_dataset.add_row(data={"text":"text data"})
+        sku_dataset = client.get_dataset(dataset_id="<dataset_id>")
+        sku_row = sku_dataset.add_row(data={"sku_image": "gs://loopr-demo-dataset/a7e9b922-f8d5-43aa-abb9-5a3095f88edc","sku_name": "product name"})
 
         print(image_row)
         print(paired_row)
+        print(text_row)
+        print(sku_row)
 
     This prints
 
@@ -75,6 +84,8 @@ Dataset
 
         <ImageRow {'dataset_id': '< dataset id >', 'uid': '< row id >'}>
         <PairedRow {'dataset_id': '< dataset id >', 'uid': '< row_id >'}>
+        <TextRow {'dataset_id': '< dataset id >', 'uid': '< row_id >'}>
+        <SkuRow {'dataset_id': '< dataset id >', 'uid': '< row_id >'}>
 
 
     |

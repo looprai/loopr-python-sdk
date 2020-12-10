@@ -1,5 +1,7 @@
 from loopr.api.row.image_row import ImageRow
 from loopr.api.row.paired_row import PairedRow
+from loopr.api.row.sku_row import SkuRow
+from loopr.api.row.text_row import TextRow
 from loopr.exceptions import LooprInvalidResourceError
 from loopr.resources.constants import INVALID_ROW_TYPE
 
@@ -25,6 +27,8 @@ class RowInitializer:
             rows = {
                 "image": ImageRow,
                 "paired": PairedRow,
+                "text": TextRow,
+                "sku": SkuRow,
             }
 
             return rows[dataset_type]
