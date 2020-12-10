@@ -7,11 +7,13 @@ from tests.testing_helpers import (
     PREDICTIONS,
     TEST_IMAGE_DATASET_TYPE,
     TEST_PAIRED_DATASET_TYPE,
+    TEST_SKU_DATASET_TYPE,
+    TEST_TEXT_DATASET_TYPE,
     random_generator,
 )
 
 
-@pytest.mark.usefixtures("dataset")
+@pytest.mark.usefixtures("dataset", "dataset_paired", "dataset_text", "dataset_sku")
 class TestDataset:
     @pytest.mark.parametrize(
         "test_input",
@@ -28,11 +30,23 @@ class TestDataset:
                     "paired_type": {"query": "text", "data": "image"},
                 },
             ),
+            (
+                {
+                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "paired_type": None,
+                },
+            ),
+            (
+                {
+                    "dataset_type": TEST_SKU_DATASET_TYPE,
+                    "paired_type": None,
+                },
+            ),
         ],
     )
     def test_dataset_creation_deletion(self, client: LooprClient, test_input):
-
         dataset_name = "test-dataset-" + random_generator()
+        print(test_input)
         dataset = client.create_dataset(
             dataset_type=test_input[0]["dataset_type"],
             dataset_name=dataset_name,
@@ -117,3 +131,44 @@ class TestDataset:
     def test_get_dataset_info_slug(self, client: LooprClient, dataset: Dataset):
         response = client.get_dataset(dataset_slug=dataset.dataset_slug)
         assert response.dataset_name == dataset.dataset_name
+
+    @pytest.mark.parametrize(
+        "test_input",
+        [
+            (
+                {
+                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "data": {"text": "Sample Text"},
+                },
+            ),
+        ],
+    )
+    def test_dataset_text_add_row_and_delete(self, dataset_text: Dataset, test_input):
+        row = dataset_text.add_row(
+            type=test_input[0]["dataset_type"],
+            data=test_input[0]["data"],
+        )
+        dataset_text.delete_rows([row.uid])
+        assert row.dataset_id == dataset_text.uid
+
+    @pytest.mark.parametrize(
+        "test_input",
+        [
+            (
+                {
+                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "data": {
+                        "sku_image": "gs://loopr-dev-payloads/a7e9b922-f8d5",
+                        "sku_name": "Sample Sku Name",
+                    },
+                },
+            ),
+        ],
+    )
+    def test_dataset_sku_add_row_and_delete(self, dataset_sku: Dataset, test_input):
+        row = dataset_sku.add_row(
+            type=test_input[0]["dataset_type"],
+            data=test_input[0]["data"],
+        )
+        dataset_sku.delete_rows([row.uid])
+        assert row.dataset_id == dataset_sku.uid

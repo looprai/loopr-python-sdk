@@ -9,6 +9,8 @@ from tests.testing_helpers import (
     TEST_OBJECT_DETECTION_PROJECT_CONFIG,
     TEST_OBJECT_DETECTION_PROJECT_TYPE,
     TEST_PAIRED_DATASET_TYPE,
+    TEST_SKU_DATASET_TYPE,
+    TEST_TEXT_DATASET_TYPE,
     random_generator,
 )
 
@@ -83,3 +85,27 @@ def dataset_paired(client: LooprClient):
     )
     yield dataset_paired
     dataset_paired.delete()
+
+
+@pytest.fixture(scope="class")
+def dataset_text(client: LooprClient):
+    name = "test-text-" + random_generator()
+    dataset_text = client.create_dataset(
+        dataset_name=name,
+        dataset_slug=name,
+        dataset_type=TEST_TEXT_DATASET_TYPE,
+    )
+    yield dataset_text
+    dataset_text.delete()
+
+
+@pytest.fixture(scope="class")
+def dataset_sku(client: LooprClient):
+    name = "test-sku-" + random_generator()
+    dataset_sku = client.create_dataset(
+        dataset_name=name,
+        dataset_slug=name,
+        dataset_type=TEST_SKU_DATASET_TYPE,
+    )
+    yield dataset_sku
+    dataset_sku.delete()
