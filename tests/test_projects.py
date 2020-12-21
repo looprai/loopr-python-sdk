@@ -4,6 +4,7 @@ from datetime import datetime
 import pytest
 import requests
 
+from loopr.api.dataset.dataset import Dataset
 from loopr.api.project.project import Project
 from loopr.client import LooprClient
 from loopr.exceptions import LooprInvalidResourceError
@@ -114,3 +115,9 @@ class TestProject:
             for annotation in project.get_annotations(offset=test_offset, **test_filter)
         ]
         assert len(annotations) == 0
+
+    def test_attach_dataset(
+        self, client: LooprClient, project: Project, dataset: Dataset
+    ):
+        response = project.attach_dataset(dataset_ids=[dataset.uid])
+        assert response == True
