@@ -78,3 +78,19 @@ class Project(LooprObject):
             kwargs,
             offset=offset,
         )
+
+    def attach_dataset(self, dataset_ids: list):
+        """
+        Attach Dataset to Project.
+        >>> project.attach_dataset(dataset_ids=[dataset_id1, ...])
+
+        Args:
+            dataset_ids (list): List of dataset ids to be attached.
+
+        Response:
+            :returns "successful" message.
+        """
+        URL_PATH = "project.dataset.add"
+        request = {"project_id": self.uid, "dataset_ids": dataset_ids}
+        response = self.client.post(path=URL_PATH, body=request)
+        return response["status"]
