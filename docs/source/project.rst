@@ -89,3 +89,18 @@ Project
 
         <Annotation {'annotation_data': {'taxonomies': [{'taxonomy_name': 'relevancy', 'value': ['3'], 'annotated_by': 'test@loopr.com', 'last_updated_by': 'test@loopr.com'}]}, 'row': {'payload': [{'image_url': 'https://dev-storage.loopr.ai/loopr-dev-payloads/test_loopr.jpeg', 'text': 'Drobo Portable Hard Drive Case', 'website': None, 'meta': {'width': 320, 'height': 320}}], 'query': 'portable hard drive', 'payload_type': 'text_sku'}, 'submitted_at': datetime.datetime(2020, 11, 19, 10, 51, 49, 159000, tzinfo=datetime.timezone.utc), 'uid': 'a3b82786-1995-4788-9b03-3b2906cc70ee'}>
         <Annotation {'annotation_data': {'taxonomies': [{'taxonomy_name': 'relevancy', 'value': ['3'], 'annotated_by': 'test@loopr.com', 'last_updated_by': 'test@loopr.com'}]}, 'row': {'payload': [{'image_url': 'https://dev-storage.loopr.ai/loopr-dev-payloads/test_loopr.jpeg', 'text': 'Mobile Edge Portable Hard Drive Carrying Case (Small, Black)', 'website': None, 'meta': {'width': 320, 'height': 320}}], 'query': 'portable hard drive', 'payload_type': 'text_sku'}, 'submitted_at': datetime.datetime(2020, 11, 19, 10, 51, 52, 976000, tzinfo=datetime.timezone.utc), 'uid': '487a4280-94b7-4a1d-95f9-eebc68f8800f'}>
+
+    |
+
+   .. py:method:: attach_dataset(self, dataset_ids)
+
+    :param list dataset_ids: The list of dataset_ids to be attached.
+
+    :return: returns successful or failure
+    :rtype: str
+
+    .. code-block:: python
+
+        project = client.get_project(project_id="<project id>")
+        project.attach_dataset(dataset_ids=["<dataset_id>", ...])
+
