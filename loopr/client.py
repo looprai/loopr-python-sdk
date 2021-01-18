@@ -76,17 +76,13 @@ class LooprClient:
         For Image Dataset :
             >>> dataset = client.create_dataset(type="image",name="loopr-test-dataset",slug="loopr-test-slug")
 
-        For Paired Dataset(TextImage) :
-            >>> dataset = client.create_dataset(type="paired",name="loopr-test-dataset",slug="loopr-test-slug",paired_type={'query': 'text', 'data': 'image'})
 
         Args:
-            dataset_type (str): Type of Dataset (image/paired/text/sku).
+            dataset_type (str): Type of Dataset (image/text/sku).
             dataset_name (str): Name of Dataset.
             dataset_slug (str): Slug of Dataset.
             description (str): Description for Dataset. (Optional)
 
-        Kwargs:
-            paired_type (dict): Query and Data(Result) for paired datatype.
 
         Response:
             :returns a Dataset Object.

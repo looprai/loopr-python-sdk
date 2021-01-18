@@ -54,7 +54,7 @@ project = client.create_project(type="<type of project>",name="<name for project
 - For instance, creating project of type "object_detection"
 
   ```python
-    project = client.create_project(type="object_detection",name="test-loopr-project",slug="test-looprr-project", configuration={"labels": [{"name": "bird", "tool": "bbox", "color": "#000000"}], "attributes": [],})
+    project = client.create_project(project_type="object_detection",project_name="test-loopr-project",slug="test-looprr-project", configuration={"labels": [{"name": "bird", "tool": "bbox", "color": "#000000"}], "attributes": [],})
   ```
   
 
@@ -82,7 +82,7 @@ dataset = loopr_client.create_dataset(type="<type of dataset>",name="<name for d
 - Creating dataset for image type 
 
   ```python
-  dataset = loopr_client.create_dataset(type="image", name="mydataset", slug="mydataset")
+  dataset = loopr_client.create_dataset(dataset_type="image", dataset_name="mydataset", dataset_slug="mydataset")
   ```
 
 #### Delete Dataset
@@ -102,11 +102,7 @@ dataset.delete()
   ```python
     row = dataset.add_row(data={"image_url" : "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
   ```
-- Adding row in paired dataset (TextImage)
 
-  ```python
-    row = dataset.add_row(query={"text":"query"}, data={"image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
-  ```
 
 
 #### Delete Row
