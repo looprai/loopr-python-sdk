@@ -1,5 +1,4 @@
 from loopr.api.row.image_row import ImageRow
-from loopr.api.row.paired_row import PairedRow
 from loopr.api.row.sku_row import SkuRow
 from loopr.api.row.text_row import TextRow
 from loopr.exceptions import LooprInvalidResourceError
@@ -18,7 +17,7 @@ class RowInitializer:
         Initialize the Row Object with given dataset_type.
 
         Args:
-            dataset_type (str): DataType of dataset. (image/paired)
+            dataset_type (str): DataType of dataset. (image/text/sku)
 
         Response:
             It will return an instance of row of given type.
@@ -26,7 +25,6 @@ class RowInitializer:
         try:
             rows = {
                 "image": ImageRow,
-                "paired": PairedRow,
                 "text": TextRow,
                 "sku": SkuRow,
             }

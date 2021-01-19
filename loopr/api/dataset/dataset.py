@@ -10,7 +10,6 @@ class Dataset(LooprObject):
         - Image
         - Text
         - SKU
-        - Paired (TextImage/ImageImage/TextSKU/ImageSKU)
     """
 
     entity_type = "dataset"

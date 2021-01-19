@@ -2,7 +2,6 @@ import random
 import string
 
 TEST_IMAGE_DATASET_TYPE = "image"
-TEST_PAIRED_DATASET_TYPE = "paired"
 TEST_TEXT_DATASET_TYPE = "text"
 TEST_SKU_DATASET_TYPE = "sku"
 TEST_OBJECT_DETECTION_PROJECT_TYPE = "object_detection"

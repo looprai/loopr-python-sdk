@@ -6,14 +6,13 @@ from loopr.exceptions import LooprInvalidResourceError
 from tests.testing_helpers import (
     PREDICTIONS,
     TEST_IMAGE_DATASET_TYPE,
-    TEST_PAIRED_DATASET_TYPE,
     TEST_SKU_DATASET_TYPE,
     TEST_TEXT_DATASET_TYPE,
     random_generator,
 )
 
 
-@pytest.mark.usefixtures("dataset", "dataset_paired", "dataset_text", "dataset_sku")
+@pytest.mark.usefixtures("dataset", "dataset_text", "dataset_sku")
 class TestDataset:
     @pytest.mark.parametrize(
         "test_input",
@@ -21,25 +20,16 @@ class TestDataset:
             (
                 {
                     "dataset_type": TEST_IMAGE_DATASET_TYPE,
-                    "paired_type": None,
-                },
-            ),
-            (
-                {
-                    "dataset_type": TEST_PAIRED_DATASET_TYPE,
-                    "paired_type": {"query": "text", "data": "image"},
                 },
             ),
             (
                 {
                     "dataset_type": TEST_TEXT_DATASET_TYPE,
-                    "paired_type": None,
                 },
             ),
             (
                 {
                     "dataset_type": TEST_SKU_DATASET_TYPE,
-                    "paired_type": None,
                 },
             ),
         ],
@@ -51,7 +41,6 @@ class TestDataset:
             dataset_type=test_input[0]["dataset_type"],
             dataset_name=dataset_name,
             dataset_slug=dataset_name,
-            paired_type=test_input[0]["paired_type"],
         )
         dataset.delete()
         assert dataset.uid == dataset.to_dict()["uid"]
@@ -60,7 +49,6 @@ class TestDataset:
             client.create_dataset(
                 dataset_type="invalid_type",
                 dataset_name=dataset_name,
-                paired_type=test_input[0]["paired_type"],
             )
         with pytest.raises(LooprInvalidResourceError):
             dataset.delete()
@@ -78,16 +66,35 @@ class TestDataset:
             (
                 {
                     "dataset_type": TEST_IMAGE_DATASET_TYPE,
-                    "data": {"image_url": "gs://loopr-dev-payloads/a7e9b922-f8d5"},
+                    "data": {
+                        "image_url": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                    },
                 },
             ),
             (
                 {
                     "dataset_type": TEST_IMAGE_DATASET_TYPE,
                     "data": {
-                        "image_url": "gs://loopr-dev-payloads/a7e9b922-f8d5"
-                        "-43aa-abb9-5a3095f88edc",
+                        "image_url": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                         "predictions": PREDICTIONS,
+                    },
+                },
+            ),
+            (
+                {
+                    "dataset_type": TEST_IMAGE_DATASET_TYPE,
+                    "data": {
+                        "image_url": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                        "query": "query",
+                    },
+                },
+            ),
+            (
+                {
+                    "dataset_type": TEST_IMAGE_DATASET_TYPE,
+                    "data": {
+                        "image_url": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                        "query": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                     },
                 },
             ),
@@ -100,29 +107,6 @@ class TestDataset:
         )
         dataset.delete_rows([row.uid])
         assert row.dataset_id == dataset.uid
-
-    @pytest.mark.parametrize(
-        "test_input",
-        [
-            (
-                {
-                    "dataset_type": TEST_PAIRED_DATASET_TYPE,
-                    "data": {"image": "gs://loopr-dev-payloads/a7e9b922-f8d5"},
-                    "query": {"text": "HELLO"},
-                },
-            ),
-        ],
-    )
-    def test_dataset_add_row_paired_and_delete(
-        self, dataset_paired: Dataset, test_input
-    ):
-        row = dataset_paired.add_row(
-            type=test_input[0]["dataset_type"],
-            data=test_input[0]["data"],
-            query=test_input[0]["query"],
-        )
-        dataset_paired.delete_rows([row.uid])
-        assert row.dataset_id == dataset_paired.uid
 
     def test_get_dataset_info_id(self, client: LooprClient, dataset: Dataset):
         response = client.get_dataset(dataset_id=dataset.uid)
@@ -158,8 +142,28 @@ class TestDataset:
                 {
                     "dataset_type": TEST_TEXT_DATASET_TYPE,
                     "data": {
-                        "sku_image": "gs://loopr-dev-payloads/a7e9b922-f8d5",
+                        "sku_image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                         "sku_name": "Sample Sku Name",
+                    },
+                },
+            ),
+            (
+                {
+                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "data": {
+                        "sku_image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                        "sku_name": "Sample Sku Name",
+                        "query": "query",
+                    },
+                },
+            ),
+            (
+                {
+                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "data": {
+                        "sku_image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                        "sku_name": "Sample Sku Name",
+                        "query": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                     },
                 },
             ),

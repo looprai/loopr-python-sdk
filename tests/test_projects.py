@@ -35,10 +35,7 @@ class TestProject:
                 {
                     "project_type": TEST_RELEVANCY_PROJECT_TYPE,
                     "configuration": TEST_RELEVANCY_PROJECT_CONFIG,
-                    "dataset_type": {
-                        "query_datatype": "text",
-                        "result_datatype": "image",
-                    },
+                    "dataset_type": "image",
                 },
             ),
             (

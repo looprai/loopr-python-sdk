@@ -22,15 +22,12 @@ Client
                      Allowed type:\
 
                         * ``image``\
-                        * ``paired``
                         * ``text``
                         * ``sku``
 
    :param str dataset_name: The name of dataset which is to be created.
    :param str dataset_slug: The slug for dataset which is to be created. It's an optional parameter.
    :param str description: The description of the dataset. It's an optional parameter.
-   :param dict paired_type: This argument has to be passed when creating ``paired`` dataset.\
-                            value is a dictionary. ex:``{"query": "text", "data":"image"}``
    :return: a Loopr Dataset instance
    :rtype: Dataset
 
@@ -41,11 +38,6 @@ Client
        image_dataset = client.create_dataset(
             dataset_type="image", dataset_name="image dataset"
         )
-        paired_dataset = client.create_dataset(
-            dataset_type="paired",
-            dataset_name="paired dataset",
-            paired_type={"query": "text", "data": "image"},
-        )
         text_dataset = client.create_dataset(
             dataset_type="text",
             dataset_name="text dataset",
@@ -55,7 +47,6 @@ Client
             dataset_name="sku dataset"
         )
         print(image_dataset)
-        print(paired_dataset)
         print(text_dataset)
         print(sku_dataset)
 
@@ -64,7 +55,6 @@ This prints:
    .. code-block:: text
 
         <ImageDataset {'dataset_name': 'image dataset', 'dataset_slug': 'image-dataset', 'description': '', 'uid': '855c8a8b-3417-4909-8db2-89f4726fbcf6'}>
-        <PairedDataset {'dataset_name': 'paired dataset', 'dataset_slug': 'paired-dataset', 'description': '', 'uid': '4a80163f-079c-4bc5-9013-6bb9c510984a'}>
         <TextDataset {'dataset_name': 'text dataset', 'dataset_slug': 'text-dataset', 'description': '', 'uid': 'cb65bca3-b255-43e9-a8fb-382ab6bf1d8e'}>
         <SkuDataset {'dataset_name': 'sku dataset', 'dataset_slug': 'sku-dataset', 'description': '', 'uid': '50901db4-32e8-481a-840e-262ac912db8c'}>
 
@@ -83,11 +73,9 @@ This prints:
     .. code-block:: python
 
         image_dataset= client.get_dataset(dataset_slug="image-dataset")
-        paired_dataset= client.get_dataset(dataset_id="4a80163f-079c-4bc5-9013-6bb9c510984a")
         text_dataset= client.get_dataset(dataset_id="cb65bca3-b255-43e9-a8fb-382ab6bf1d8e")
         sku_dataset= client.get_dataset(dataset_id="50901db4-32e8-481a-840e-262ac912db8c")
         print(image_dataset)
-        print(paired_dataset)
         print(text_dataset)
         print(sku_dataset)
 
@@ -96,7 +84,6 @@ This prints:
     .. code-block:: text
 
         <ImageDataset {'dataset_name': 'image dataset', 'dataset_slug': 'image-dataset', 'description': '', 'uid': '855c8a8b-3417-4909-8db2-89f4726fbcf6'}>
-        <PairedDataset {'dataset_name': 'paired dataset', 'dataset_slug': 'paired-dataset', 'description': '', 'uid': '4a80163f-079c-4bc5-9013-6bb9c510984a'}>
         <TextDataset {'dataset_name': 'text dataset', 'dataset_slug': 'text-dataset', 'description': '', 'uid': 'cb65bca3-b255-43e9-a8fb-382ab6bf1d8e'}>
         <SkuDataset {'dataset_name': 'sku dataset', 'dataset_slug': 'sku-dataset', 'description': '', 'uid': '50901db4-32e8-481a-840e-262ac912db8c'}>
 
@@ -119,7 +106,6 @@ This prints:
    .. code-block:: text
 
         <ImageDataset {'dataset_name': 'image dataset', 'dataset_slug': 'image-dataset', 'description': '', 'uid': '855c8a8b-3417-4909-8db2-89f4726fbcf6'}>
-        <PairedDataset {'dataset_name': 'paired dataset', 'dataset_slug': 'paired-dataset', 'description': '', 'uid': '4a80163f-079c-4bc5-9013-6bb9c510984a'}>
         <TextDataset {'dataset_name': 'text dataset', 'dataset_slug': 'text-dataset', 'description': '', 'uid': 'cb65bca3-b255-43e9-a8fb-382ab6bf1d8e'}>
         <SkuDataset {'dataset_name': 'sku dataset', 'dataset_slug': 'sku-dataset', 'description': '', 'uid': '50901db4-32e8-481a-840e-262ac912db8c'}>
 
@@ -142,7 +128,7 @@ This prints:
    :param bool review: To turn on review of data after annotation. It's optional parameter.
    :param str description: The description of the project. It's an optional parameter.
    :param dict dataset_type: It's an optional parameter but has to be passed when creating a \
-                                ``relevancy`` type project. ex: ``{"query_datatype": "text","result_datatype": "image"}``
+                                ``relevancy`` type project. ex: ``text/image/sku``
    :return: a Loopr project instance
    :rtype: Project
 
@@ -167,7 +153,7 @@ This prints:
                 "question": "question",
                 "choices": [{"score": 5, "description": "excellent"}],
             },
-            dataset_type={"query_datatype": "text", "result_datatype": "image"},
+            dataset_type="text",
         )
 
        categorization_project= client.create_project(

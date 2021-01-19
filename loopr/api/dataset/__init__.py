@@ -1,5 +1,4 @@
 from loopr.api.dataset.image_dataset import ImageDataset
-from loopr.api.dataset.paired_dataset import PairedDataset
 from loopr.api.dataset.sku_dataset import SkuDataset
 from loopr.api.dataset.text_dataset import TextDataset
 from loopr.exceptions import LooprInvalidResourceError
@@ -15,7 +14,7 @@ class DatasetInitializer:
 
     def __call__(self, dataset_type):
         """
-        Initialize the Dataset Object with given datatype. (image/paired)
+        Initialize the Dataset Object with given datatype. (image/text/sku)
 
         Args:
             dataset_type (str): DataType of dataset.
@@ -26,7 +25,6 @@ class DatasetInitializer:
         try:
             datasets = {
                 "image": ImageDataset,
-                "paired": PairedDataset,
                 "text": TextDataset,
                 "sku": SkuDataset,
             }
