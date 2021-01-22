@@ -40,16 +40,16 @@ Prerequisite : pip
     loopr_client = LooprClient(api_key="<your api key>", endpoint="<your endpoint>")
    ```
 
-## Getting Sarted
+## Getting Started
 
 
-
+## Project
 
 #### Create Project
 
 
 ```python 
-project = client.create_project(type="<type of project>",name="<name for project>",slug="<slug for project>", configuration={"labels": ["<list of labels>"], "attributes": ["<list of attributes>"],})
+project = client.create_project(project_type="<type of project>",project_name="<name for project>",project_slug="<slug for project>", configuration={"labels": ["<list of labels>"], "attributes": ["<list of attributes>"],})
 ```
 - For instance, creating project of type "object_detection"
 
@@ -62,8 +62,19 @@ project = client.create_project(type="<type of project>",name="<name for project
 #### Project Config Export
 
 ```python
-config_download_url =project.export_configuration()
+config_download_url = project.export_configuration()
 ```
+
+#### Get Project
+User can fetch a project by either passing the *project id* or *project slug*.
+```python
+project = client.get_project(project_id = "<id of project>")
+```
+or
+```python
+project = client.get_project(project_slug = "<slug for project>")
+```
+
 
 #### Delete Project
 
@@ -71,13 +82,13 @@ config_download_url =project.export_configuration()
 project.delete()
 ```
 
-
+## Dataset
 
 #### Create Dataset
 
 
 ```python 
-dataset = loopr_client.create_dataset(type="<type of dataset>",name="<name for dataset>", slug="<slug for dataset>")
+dataset = loopr_client.create_dataset(dataset_type="<type of dataset>",dataset_name="<name for dataset>", dataset_slug="<slug for dataset>")
 ```
 - Creating dataset for image type 
 
@@ -85,12 +96,32 @@ dataset = loopr_client.create_dataset(type="<type of dataset>",name="<name for d
   dataset = loopr_client.create_dataset(dataset_type="image", dataset_name="mydataset", dataset_slug="mydataset")
   ```
 
+#### Get Dataset
+User can fetch a dataset by either passing the *dataset id* or *dataset slug*.
+```python
+dataset = client.get_dataset(dataset_id = "<id of dataset>")
+```
+or
+```python
+dataset = client.get_dataset(dataset_slug = "<slug for dataset>")
+```
+
 #### Delete Dataset
 
 ```python
 dataset.delete()
 ```
-  
+
+#### List Datasets
+
+```python
+datasets = client.get_datasets()
+for dataset in datasets:
+    print(dataset)
+```
+
+
+## Row
 
 #### Add Row
 
@@ -102,7 +133,10 @@ dataset.delete()
   ```python
     row = dataset.add_row(data={"image_url" : "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
   ```
-
+- Adding row in image dataset with query (only valid for relevancy project)
+  ```python
+    row = dataset.add_row(data={"image_url" : "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d", "query":"myquery"})
+  ```
 
 
 #### Delete Row
@@ -125,10 +159,3 @@ dataset.delete_rows(row_ids = ["list of row ids"])
   ```
   
   
-#### List Datasets
-
-```python
-datasets = client.get_datasets()
-for dataset in datasets:
-    print(dataset)
-```
