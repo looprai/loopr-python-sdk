@@ -1,10 +1,11 @@
 from loopr.api.annotation.annotation import Annotation
+from loopr.api.project.abs_project import AbsProject
 from loopr.models.entities.data_types import Field
 from loopr.models.entities.loopr_object import LooprObject
 from loopr.models.entities.loopr_object_collection import LooprObjectCollection
 
 
-class Project(LooprObject):
+class Project(LooprObject, AbsProject):
     """
     Projects are a way of organizing similar tasks, so that one can share parameters among tasks.
     A project can attach multiple datasets.
@@ -16,6 +17,10 @@ class Project(LooprObject):
     project_slug = Field.String("project_slug")
     description = Field.String("description")
 
+    @staticmethod
+    def _create_project_instance(client, **kwargs):
+        return Project(client, kwargs)
+
     def delete(self):
         """
         Delete the Project.
@@ -24,7 +29,7 @@ class Project(LooprObject):
         Response :
             :returns "successful" message.
         """
-        URL_PATH = "project.delete"
+        URL_PATH = self.client.url_initializer.project_delete_url()
         request = {"project_id": self.uid}
         response = self.client.post(path=URL_PATH, body=request)
         return response["message"]
@@ -39,7 +44,7 @@ class Project(LooprObject):
         Response:
             :returns a download url for the project configuration.
         """
-        URL_PATH = "project.configuration.export"
+        URL_PATH = self.client.url_initializer.project_taxonomy_export_url()
         request = {"project_id": self.uid}
         response = self.client.get(path=URL_PATH, params=request)
         return response["download_url"]
@@ -67,7 +72,7 @@ class Project(LooprObject):
         Response:
              :returns a iterable list of Annotations.
         """
-        URL_PATH = "project.annotation.list"
+        URL_PATH = self.client.url_initializer.project_annotation_list_url()
         kwargs["project_id"] = self.uid
         return LooprObjectCollection(
             self.client,
@@ -90,7 +95,74 @@ class Project(LooprObject):
         Response:
             :returns "successful" message.
         """
-        URL_PATH = "project.dataset.add"
+        URL_PATH = self.client.url_initializer.project_dataset_add_url()
         request = {"project_id": self.uid, "dataset_ids": dataset_ids}
         response = self.client.post(path=URL_PATH, body=request)
-        return response["status"]
+        return response["message"]
+
+    def update_project(self, project_name: str = None, description: str = None):
+        """
+        Upadte the Project.
+        >>> project.update_project(project_name="project_name", description="desc")
+
+        Args:
+            dataset_name : Name of dataset.
+            description : Dataset description.
+
+        Response:
+             :returns project instance.
+
+        """
+        URL_PATH = self.client.url_initializer.project_update_url()
+        request = {
+            "project_name": project_name,
+            "project_id": self.uid,
+            "description": description,
+        }
+        response = self.client.post(path=URL_PATH, body=request)
+        return response
+
+    def add_taxonomy(self, taxonomy: dict):
+        """
+        Add Taxonommy to Project.
+        >>> project.add_taxonomy(taxonomy="{dict of taxonomy data}")
+
+        Args:
+            taxonomy : Taxonomy/Configuration of project.
+
+        Response:
+            :returns successful status
+        """
+        URL_PATH = self.client.url_initializer.project_taxonomy_create_url()
+        request = {"project_id": self.uid, "taxonomy": taxonomy}
+        response = self.client.post(path=URL_PATH, body=request)
+        return response["message"]
+
+    def update_taxonomy(self, taxonomy: dict):
+        """
+        Add Taxonommy to Project.
+        >>> project.update_taxonomy(taxonomy="{dict of taxonomy data}")
+
+        Args:
+            taxonomy : Taxonomy/Configuration of project.
+
+        Response:
+            :returns successful status
+        """
+        URL_PATH = self.client.url_initializer.project_taxonomy_update_url()
+        request = {"project_id": self.uid, "taxonomy": taxonomy}
+        response = self.client.post(path=URL_PATH, body=request)
+        return response["taxonomy"]
+
+    def get_taxonomy(self):
+        """
+        Returns information of taxonomy of the project.
+        >>> project.get_taxonomy()
+
+        Response:
+            :returns taxonomy/configuration dictionary.
+        """
+        URL_PATH = self.client.url_initializer.project_taxonomy_info_url()
+        request = {"project_id": self.uid}
+        response = self.client.get(path=URL_PATH, params=request)
+        return response

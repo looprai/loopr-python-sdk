@@ -66,6 +66,7 @@ def project(client: LooprClient):
     project = client.create_project(
         project_name=name,
         project_slug=name,
+        dataset_type=TEST_IMAGE_DATASET_TYPE,
         project_type=TEST_OBJECT_DETECTION_PROJECT_TYPE,
         configuration=TEST_OBJECT_DETECTION_PROJECT_CONFIG,
     )

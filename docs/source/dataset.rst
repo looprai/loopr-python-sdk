@@ -64,7 +64,7 @@ Dataset
     .. code-block:: python
 
         image_dataset = client.get_dataset(dataset_id="<dataset_id>")
-        image_row= image_dataset.add_row(data={"image_url":"gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
+        image_row= image_dataset.add_row(data={"image":"gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"})
         text_dataset = client.get_dataset(dataset_id="<dataset_id>")
         text_row = text_dataset.add_row(data={"text":"text data"})
         sku_dataset = client.get_dataset(dataset_id="<dataset_id>")
@@ -78,9 +78,9 @@ Dataset
 
     .. code-block:: text
 
-        <ImageRow {'dataset_id': '< dataset id >', 'uid': '< row id >'}>
-        <TextRow {'dataset_id': '< dataset id >', 'uid': '< row_id >'}>
-        <SkuRow {'dataset_id': '< dataset id >', 'uid': '< row_id >'}>
+        <Row {'dataset_id': '< dataset id >', 'uid': '< row id >'}>
+        <Row {'dataset_id': '< dataset id >', 'uid': '< row_id >'}>
+        <Row {'dataset_id': '< dataset id >', 'uid': '< row_id >'}>
 
 
     |
@@ -109,3 +109,29 @@ Dataset
     .. code-block:: python
 
         dataset.delete()
+
+
+    |
+
+   .. py:method:: update_dataset(self, dataset_name, description)
+
+    :param str dataset_name: Name of dataset.
+    :param str description: Description of dataset.
+
+    :return: returns a dataset instance.
+    :rtype: Dataset
+
+    .. code-block:: python
+
+        dataset = client.get_dataset(dataset_id="<dataset id>")
+        dataset.update_dataset(dataset_name="updateddatasetname")
+
+   This prints
+
+    .. code-block:: text
+
+        <Dataset {'dataset_name': 'updateddatasetname', 'dataset_slug': 'image-dataset', 'description': '', 'uid': '855c8a8b-3417-4909-8db2-89f4726fbcf6'}>
+
+
+    |
+

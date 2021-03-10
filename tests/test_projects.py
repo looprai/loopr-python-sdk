@@ -9,12 +9,15 @@ from loopr.api.project.project import Project
 from loopr.client import LooprClient
 from loopr.exceptions import LooprInvalidResourceError
 from tests.testing_helpers import (
-    TEST_CATEGORIZATION_PROJECT_CONFIG,
     TEST_CATEGORIZATION_PROJECT_TYPE,
+    TEST_IMAGE_DATASET_TYPE,
     TEST_OBJECT_DETECTION_PROJECT_CONFIG,
+    TEST_OBJECT_DETECTION_PROJECT_CONFIG_RESPONSE,
     TEST_OBJECT_DETECTION_PROJECT_TYPE,
-    TEST_RELEVANCY_PROJECT_CONFIG,
+    TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG,
     TEST_RELEVANCY_PROJECT_TYPE,
+    TEST_SKU_DATASET_TYPE,
+    TEST_TEXT_DATASET_TYPE,
     random_generator,
 )
 
@@ -27,22 +30,19 @@ class TestProject:
             (
                 {
                     "project_type": TEST_OBJECT_DETECTION_PROJECT_TYPE,
-                    "configuration": TEST_OBJECT_DETECTION_PROJECT_CONFIG,
-                    "dataset_type": None,
+                    "dataset_type": TEST_IMAGE_DATASET_TYPE,
                 },
             ),
             (
                 {
                     "project_type": TEST_RELEVANCY_PROJECT_TYPE,
-                    "configuration": TEST_RELEVANCY_PROJECT_CONFIG,
-                    "dataset_type": "image",
+                    "dataset_type": TEST_SKU_DATASET_TYPE,
                 },
             ),
             (
                 {
                     "project_type": TEST_CATEGORIZATION_PROJECT_TYPE,
-                    "configuration": TEST_CATEGORIZATION_PROJECT_CONFIG,
-                    "dataset_type": "image",
+                    "dataset_type": TEST_TEXT_DATASET_TYPE,
                 },
             ),
         ],
@@ -53,7 +53,6 @@ class TestProject:
             project_type=test_input[0]["project_type"],
             project_name=project_name,
             project_slug=project_name,
-            configuration=test_input[0]["configuration"],
             dataset_type=test_input[0]["dataset_type"],
         )
         project.delete()
@@ -63,18 +62,30 @@ class TestProject:
             client.create_project(
                 project_type="invalid_type",
                 project_name=project_name,
-                configuration=test_input[0]["configuration"],
                 dataset_type=test_input[0]["dataset_type"],
             )
         with pytest.raises(LooprInvalidResourceError):
             project.delete()
 
+    def test_taxonomy_add(self, project: Project):
+        response = project.add_taxonomy(TEST_OBJECT_DETECTION_PROJECT_CONFIG)
+        assert response == "successful"
+
+    def test_get_taxonomy(self, project: Project):
+        response = project.get_taxonomy()
+        assert response["taxonomy"] == TEST_OBJECT_DETECTION_PROJECT_CONFIG
+
     def test_export_configuration(self, project: Project):
         download_url = project.export_configuration()
         response = requests.get(download_url)
+        print(response.text)
         assert json.loads(response.text) == {
-            "configuration": TEST_OBJECT_DETECTION_PROJECT_CONFIG
+            "configuration": TEST_OBJECT_DETECTION_PROJECT_CONFIG_RESPONSE
         }
+
+    def test_update_taxonomy(self, project: Project):
+        response = project.update_taxonomy(TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG)
+        assert response == TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG
 
     def test_project_listing(self, client: LooprClient, project: Project):
         project_name = []
@@ -117,4 +128,8 @@ class TestProject:
         self, client: LooprClient, project: Project, dataset: Dataset
     ):
         response = project.attach_dataset(dataset_ids=[dataset.uid])
-        assert response == True
+        assert response == "successful"
+
+    def test_update_project(self, project: Project):
+        response = project.update_project(project_name="newprojectname")
+        assert response["project_name"] == "newprojectname"
