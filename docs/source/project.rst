@@ -92,8 +92,8 @@ Project
 
     .. code-block:: text
 
-        <Annotation {'annotation_data': {'taxonomies': [{'taxonomy_name': 'relevancy', 'value': ['3'], 'annotated_by': 'test@loopr.com', 'last_updated_by': 'test@loopr.com'}]}, 'row': {'payload': [{'image_url': 'https://dev-storage.loopr.ai/loopr-dev-payloads/test_loopr.jpeg', 'text': 'Drobo Portable Hard Drive Case', 'website': None, 'meta': {'width': 320, 'height': 320}}], 'query': 'portable hard drive', 'payload_type': 'text_sku'}, 'submitted_at': datetime.datetime(2020, 11, 19, 10, 51, 49, 159000, tzinfo=datetime.timezone.utc), 'uid': 'a3b82786-1995-4788-9b03-3b2906cc70ee'}>
-        <Annotation {'annotation_data': {'taxonomies': [{'taxonomy_name': 'relevancy', 'value': ['3'], 'annotated_by': 'test@loopr.com', 'last_updated_by': 'test@loopr.com'}]}, 'row': {'payload': [{'image_url': 'https://dev-storage.loopr.ai/loopr-dev-payloads/test_loopr.jpeg', 'text': 'Mobile Edge Portable Hard Drive Carrying Case (Small, Black)', 'website': None, 'meta': {'width': 320, 'height': 320}}], 'query': 'portable hard drive', 'payload_type': 'text_sku'}, 'submitted_at': datetime.datetime(2020, 11, 19, 10, 51, 52, 976000, tzinfo=datetime.timezone.utc), 'uid': '487a4280-94b7-4a1d-95f9-eebc68f8800f'}>
+        <Annotation {'annotation_data': {'classifications': [{'concept_id': 'c_id1', 'annotated_by': 'test@loopr.com', 'classification_name': 'How well does this query match result?', 'choices': [{'choice_id': 'choice_id1', 'name': '3', 'description': 'Good'}]}], 'row': {'payload_type': 'text', 'external_id': 'external_id1', 'payload': [{'image_url': 'https://dev-storage.loopr.ai/loopr-dev-payloads/test_loopr1.jpeg', 'meta': {'width': 700, 'height': 700}, 'image_thumbnail': 'https://dev-storage.loopr.ai/loopr-dev-payloads/test_loopr1.jpeg'}], 'query': 'query1'}, 'submitted_at': datetime.datetime(2021, 1, 19, 11, 2, 13, 208000, tzinfo=datetime.timezone.utc), 'uid': '30266846-f48f-4a2d-83d1-cca57b93c816'}>
+        <Annotation {'annotation_data': {'classifications': [{'concept_id': 'c_id2', 'annotated_by': 'test@loopr.com', 'classification_name': 'How well does this query match result?', 'choices': [{'choice_id': 'choice_id2', 'name': '4', 'description': 'Excellent'}]}], 'row': {'payload_type': 'text', 'external_id': 'external_id2', 'payload': [{'image_url': 'https://dev-storage.loopr.ai/loopr-dev-payloads/test_loopr2.jpeg', 'meta': {'width': 780, 'height': 600}, 'image_thumbnail': 'https://dev-storage.loopr.ai/loopr-dev-payloads/test_loopr2.jpeg'}], 'query': 'query2'}, 'submitted_at': datetime.datetime(2021, 1, 19, 11, 2, 13, 208000, tzinfo=datetime.timezone.utc), 'uid': '30266846-f48f-4a2d-83d1-cca57b93c816'}>
 
     |
 
@@ -144,7 +144,41 @@ Project
     .. code-block:: python
 
         project = client.get_project(project_id="<project id>")
-        project.add_taxonomy(taxonomy="{taxonomy data}")
+        project.add_taxonomy(taxonomy={
+        "taxonomy_id": "tid1",
+        "labels": [
+            {
+                "concept_id": "cid1",
+                "name": "string",
+                "type": "bbox",
+                "color": "#32CD32",
+                "attributes": [
+                    {
+                        "attribute_id": "attr1",
+                        "name": "attribute1",
+                        "required": True,
+                        "is_multi": True,
+                        "type": "categorical",
+                        "choices": [
+                            {
+                                "choice_id": "cid2",
+                                "name": "choice1",
+                                "description": "descriptionn",
+                            }
+                        ],
+                    },
+                    {
+                        "attribute_id": "attr2",
+                        "name": "attribute2",
+                        "required": True,
+                        "type": "text",
+                    },
+                ],
+            }
+        ],
+        "classifications": [],
+        "instruction": "instruction"
+        })
 
 
     |
@@ -153,13 +187,26 @@ Project
 
     :param dict taxonomy: Taxonomy/Configuration of project.
 
-    :return: returns successful or failure
+    :return: returns updated taxonomy data
     :rtype: str
 
     .. code-block:: python
 
         project = client.update_project(project_id="<project id>")
         project.update_taxonomy(taxonomy="{taxonomy data}")
+
+
+    |
+
+   .. py:method:: get_taxonomy(self)
+
+    :return: returns taxonomy data
+    :rtype: str
+
+    .. code-block:: python
+
+        project = client.update_project(project_id="<project id>")
+        project.get_taxonomy()
 
 
     |

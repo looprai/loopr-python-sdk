@@ -49,15 +49,73 @@ Prerequisite : pip
 
 
 ```python 
-project = client.create_project(project_type="<type of project>",project_name="<name for project>",project_slug="<slug for project>", configuration={"labels": ["<list of labels>"], "attributes": ["<list of attributes>"],})
+project = client.create_project(project_type="<type of project>",project_name="<name for project>",project_slug="<slug for project>", dataset_type="<dataset type for project>")
 ```
 - For instance, creating project of type "object_detection"
 
   ```python
-    project = client.create_project(project_type="object_detection",project_name="test-loopr-project",slug="test-looprr-project", configuration={"labels": [{"name": "bird", "tool": "bbox", "color": "#000000"}], "attributes": [],})
+    project = client.create_project(project_type="object_detection",project_name="test-loopr-project",slug="test-looprr-project", dataset_type="image")
   ```
   
+#### Add Taxonomy
+```python
+project.add_taxonomy(taxonomy="<taxonomy/configuration of project>")
+```
+- For instance, adding taxonomy for project type "object_detection"
 
+  ```python
+    project.add_taxonomy(taxonomy={
+    "taxonomy_id": "tid1",
+    "labels": [
+        {
+            "concept_id": "cid1",
+            "name": "string",
+            "type": "bbox",
+            "color": "#32CD32",
+            "attributes": [
+                {
+                    "attribute_id": "attr1",
+                    "name": "attribute1",
+                    "required": True,
+                    "is_multi": True,
+                    "type": "categorical",
+                    "choices": [
+                        {
+                            "choice_id": "cid2",
+                            "name": "choice1",
+                            "description": "descriptionn",
+                        }
+                    ],
+                },
+                {
+                    "attribute_id": "attr2",
+                    "name": "attribute2",
+                    "required": True,
+                    "type": "text",
+                },
+            ],
+        }
+    ],
+    "classifications": [],
+    "instruction": "instruction"
+  })
+  ```
+
+
+#### Update Project
+```python
+project.update_project(project_name = "<updated project name>", description = "<updated description>")
+```
+
+#### Update Taxonomy
+```python
+project.update_taxonomy(taxonomy="<updated taxonomy>")
+```
+
+#### Attach Dataset
+```python
+project.attach_dataset(dataset_ids="<list of dataset ids to be attached>")
+```
 
 #### Project Config Export
 
@@ -75,12 +133,25 @@ or
 project = client.get_project(project_slug = "<slug for project>")
 ```
 
+#### Get Taxonomy/Configuration
+```python
+project.get_taxonomy()
+```
 
 #### Delete Project
 
 ```python
 project.delete()
 ```
+
+#### List Projects
+
+```python
+projects = client.get_projects()
+for project in projects:
+    print(project)
+```
+
 
 ## Dataset
 
@@ -95,6 +166,11 @@ dataset = loopr_client.create_dataset(dataset_type="<type of dataset>",dataset_n
   ```python
   dataset = loopr_client.create_dataset(dataset_type="image", dataset_name="mydataset", dataset_slug="mydataset")
   ```
+
+#### Update Dataset
+```python
+dataset.update_dataset(dataset_name = "<updated dataset name>", description = "<updated description>")
+```
 
 #### Get Dataset
 User can fetch a dataset by either passing the *dataset id* or *dataset slug*.

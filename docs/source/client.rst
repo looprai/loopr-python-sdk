@@ -111,7 +111,7 @@ This prints:
 
    |
 
-   .. py:method:: create_project(self, project_type, project_name, project_slug, configuration, vote = 1, review = False, **kwargs)
+   .. py:method:: create_project(self, project_type, project_name, project_slug, dataset_type, description, **kwargs)
 
    Creates a project of a given type, name and configuration in your team/space.
 
@@ -121,11 +121,13 @@ This prints:
                         * ``object_detection``
                         * ``relevancy``
                         * ``categorization``
+                        * ``ner``
+                        * ``ocr``
    :param str project_name: The name of project which is to be created.
    :param str project_slug: The slug of project which is to be created. It's an optional parameter.
    :param str description: The description of the project. It's an optional parameter.
-   :param dict dataset_type: It's an optional parameter but has to be passed when creating a \
-                                ``relevancy`` type project. ex: ``text/image/sku``
+   :param str dataset_type: The type of dataset for the project.
+
    :return: a Loopr project instance
    :rtype: Project
 
@@ -212,6 +214,6 @@ This prints:
 
    .. code-block:: text
 
-        <ObjectDetectionProject {'description': None, 'project_name': 'object detection project', 'project_slug': 'object-detection-project', 'project_type': 'object_detection', 'uid': '67a1c405-39af-480e-954c-4e9eb29f14e6'}>
-        <RelevancyProject {'description': None, 'project_name': 'relevancy project', 'project_slug': 'relevancy-project', 'project_type': 'search_relevancy', 'uid': 'ac5a0243-4b53-4d8c-a539-4f0dfda86ef8'}>
-        <CategorizationProject {'description': None, 'project_name': 'categorization project', 'project_slug': 'categorization-project', 'project_type': 'categorization', 'uid': '30266846-f48f-4a2d-83d1-cca57b93c816'}>
+        <Project {'description': None, 'project_name': 'object detection project', 'project_slug': 'object-detection-project', 'project_type': 'object_detection', 'uid': '67a1c405-39af-480e-954c-4e9eb29f14e6'}>
+        <Project {'description': None, 'project_name': 'relevancy project', 'project_slug': 'relevancy-project', 'project_type': 'search_relevancy', 'uid': 'ac5a0243-4b53-4d8c-a539-4f0dfda86ef8'}>
+        <Project {'description': None, 'project_name': 'categorization project', 'project_slug': 'categorization-project', 'project_type': 'categorization', 'uid': '30266846-f48f-4a2d-83d1-cca57b93c816'}>
