@@ -1,6 +1,11 @@
 from loopr.api.dataset.dataset import Dataset
 from loopr.exceptions import LooprInvalidResourceError
-from loopr.resources.constants import INVALID_DATASET_TYPE
+from loopr.resources.constants import (
+    INVALID_DATASET_TYPE,
+    image_type_dataset,
+    sku_type_dataset,
+    text_type_dataset,
+)
 
 
 class DatasetInitializer:
@@ -20,9 +25,9 @@ class DatasetInitializer:
         """
         try:
             datasets = {
-                "image": Dataset,
-                "text": Dataset,
-                "sku": Dataset,
+                image_type_dataset: Dataset,
+                text_type_dataset: Dataset,
+                sku_type_dataset: Dataset,
             }
 
             return datasets[dataset_type]

@@ -37,7 +37,7 @@ Dataset
     :param dict data: Row data to create rows.Format of Arguments for different datatypes:
 
                 * image:
-                    ``data={"image_url":"< image_url >"}``
+                    ``data={"image":"< image_url >"}``
                 * text:
                     ``data={"text":"<your text>"}``
                 * sku:
@@ -52,7 +52,7 @@ Dataset
                 Query is an optional string field that can be passed with data dict. It is only valid for image and sku dataset type.
 
                 * image:
-                    ``data={"image_url":"< image_url >", "query":"<your query>"}``
+                    ``data={"image":"< image_url >", "query":"<your query>"}``
                 * sku:
                     ``data={"sku_image":"< image_url >", "sku_name":"<your sku name>", "query":"<your query>"}``
 

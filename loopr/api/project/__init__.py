@@ -1,6 +1,13 @@
 from loopr.api.project.project import Project
 from loopr.exceptions import LooprInvalidResourceError
-from loopr.resources.constants import INVALID_PROJECT_TYPE
+from loopr.resources.constants import (
+    INVALID_PROJECT_TYPE,
+    categorization_type_project,
+    ner_type_project,
+    object_detection_type_project,
+    ocr_type_project,
+    relevancy_type_project,
+)
 
 
 class ProjectInitializer:
@@ -20,10 +27,11 @@ class ProjectInitializer:
         """
         try:
             projects = {
-                "relevancy": Project,
-                "object_detection": Project,
-                "categorization": Project,
-                "ner": Project,
+                relevancy_type_project: Project,
+                object_detection_type_project: Project,
+                categorization_type_project: Project,
+                ner_type_project: Project,
+                ocr_type_project: Project,
             }
 
             return projects[project_type]
