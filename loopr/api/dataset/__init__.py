@@ -1,6 +1,4 @@
-from loopr.api.dataset.image_dataset import ImageDataset
-from loopr.api.dataset.sku_dataset import SkuDataset
-from loopr.api.dataset.text_dataset import TextDataset
+from loopr.api.dataset.dataset import Dataset
 from loopr.exceptions import LooprInvalidResourceError
 from loopr.resources.constants import INVALID_DATASET_TYPE
 
@@ -15,18 +13,16 @@ class DatasetInitializer:
     def __call__(self, dataset_type):
         """
         Initialize the Dataset Object with given datatype. (image/text/sku)
-
         Args:
             dataset_type (str): DataType of dataset.
-
         Response:
-            It will return an instance of given type of dataset.
+            It will return an instance of dataset.
         """
         try:
             datasets = {
-                "image": ImageDataset,
-                "text": TextDataset,
-                "sku": SkuDataset,
+                "image": Dataset,
+                "text": Dataset,
+                "sku": Dataset,
             }
 
             return datasets[dataset_type]

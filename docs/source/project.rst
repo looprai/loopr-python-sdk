@@ -32,6 +32,11 @@ Project
 
    |
 
+   .. py:attribute:: dataset_type
+    :type: str
+
+   |
+
    .. py:method:: delete(self)
 
     This method is used to delete a project.
@@ -104,3 +109,57 @@ Project
         project = client.get_project(project_id="<project id>")
         project.attach_dataset(dataset_ids=["<dataset_id>", ...])
 
+
+    |
+
+   .. py:method:: update_project(self, project_name, description)
+
+    :param str project_name: Name of project.
+    :param str description: Description of project.
+
+    :return: returns a project instance.
+    :rtype: Project
+
+    .. code-block:: python
+
+        project = client.get_project(project_id="<project id>")
+        project.update_project(project_name="updatedprojectname")
+
+   This prints
+
+    .. code-block:: text
+
+        <Project {'description': None, 'project_name': 'updatedprojectname', 'project_slug': 'categorization-project', 'project_type': 'categorization', 'uid': '30266846-f48f-4a2d-83d1-cca57b93c816'}>
+
+
+    |
+
+   .. py:method:: add_taxonomy(self, taxonomy)
+
+    :param dict taxonomy: Taxonomy/Configuration of project.
+
+    :return: returns successful or failure
+    :rtype: str
+
+    .. code-block:: python
+
+        project = client.get_project(project_id="<project id>")
+        project.add_taxonomy(taxonomy="{taxonomy data}")
+
+
+    |
+
+   .. py:method:: update_taxonomy(self, taxonomy)
+
+    :param dict taxonomy: Taxonomy/Configuration of project.
+
+    :return: returns successful or failure
+    :rtype: str
+
+    .. code-block:: python
+
+        project = client.update_project(project_id="<project id>")
+        project.update_taxonomy(taxonomy="{taxonomy data}")
+
+
+    |

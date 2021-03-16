@@ -3,9 +3,8 @@ import pytest
 from loopr.api.dataset.dataset import Dataset
 from loopr.client import LooprClient
 from loopr.exceptions import LooprInvalidResourceError
+from tests.testing_helpers import TEST_IMAGE_DATASET_TYPE  # PREDICTIONS,
 from tests.testing_helpers import (
-    PREDICTIONS,
-    TEST_IMAGE_DATASET_TYPE,
     TEST_SKU_DATASET_TYPE,
     TEST_TEXT_DATASET_TYPE,
     random_generator,
@@ -36,7 +35,6 @@ class TestDataset:
     )
     def test_dataset_creation_deletion(self, client: LooprClient, test_input):
         dataset_name = "test-dataset-" + random_generator()
-        print(test_input)
         dataset = client.create_dataset(
             dataset_type=test_input[0]["dataset_type"],
             dataset_name=dataset_name,
@@ -67,7 +65,7 @@ class TestDataset:
                 {
                     "dataset_type": TEST_IMAGE_DATASET_TYPE,
                     "data": {
-                        "image_url": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                        "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                     },
                 },
             ),
@@ -75,8 +73,8 @@ class TestDataset:
                 {
                     "dataset_type": TEST_IMAGE_DATASET_TYPE,
                     "data": {
-                        "image_url": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
-                        "predictions": PREDICTIONS,
+                        "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                        # "predictions": PREDICTIONS,
                     },
                 },
             ),
@@ -84,7 +82,7 @@ class TestDataset:
                 {
                     "dataset_type": TEST_IMAGE_DATASET_TYPE,
                     "data": {
-                        "image_url": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                        "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                         "query": "query",
                     },
                 },
@@ -93,7 +91,7 @@ class TestDataset:
                 {
                     "dataset_type": TEST_IMAGE_DATASET_TYPE,
                     "data": {
-                        "image_url": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
+                        "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                         "query": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                     },
                 },
@@ -176,3 +174,7 @@ class TestDataset:
         )
         dataset_sku.delete_rows([row.uid])
         assert row.dataset_id == dataset_sku.uid
+
+    def test_update_dataset(self, dataset: Dataset):
+        response = dataset.update_dataset(dataset_name="newdatasetname")
+        assert response["dataset_name"] == "newdatasetname"

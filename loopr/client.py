@@ -6,6 +6,7 @@ from loguru import logger
 from loopr import _LOOPR_API_ENDPOINT, _LOOPR_API_KEY, DEFAULT_API_ENDPOINT
 from loopr.api.dataset import dataset_initializer
 from loopr.api.project import project_initializer
+from loopr.api.urls.urls import URLS
 from loopr.exceptions import LooprAuthenticationError, LooprInternalServerError
 from loopr.models.entities.loopr_object_collection import LooprObjectCollection
 from loopr.resources.constants import INVALID_LOOPR_KEY
@@ -39,6 +40,7 @@ class LooprClient:
         self.api_key = api_key
 
         logger.info(f"Creating Loopr client at {endpoint}")
+        self.url_initializer = URLS(endpoint)
 
         self.endpoint = endpoint
         self.headers = {
@@ -51,16 +53,14 @@ class LooprClient:
     @response_handler
     def get(self, path: str, params: dict):
         params = encode_dict(params)
-        res = requests.get(
-            url=self.endpoint + path, params=params, headers=self.headers
-        )
+        res = requests.get(url=path, params=params, headers=self.headers)
         return res
 
     @retry(exception=LooprInternalServerError)
     @response_handler
     def post(self, path: str, body: dict):
         body = encode_dict(body)
-        res = requests.post(url=self.endpoint + path, json=body, headers=self.headers)
+        res = requests.post(url=path, json=body, headers=self.headers)
         return res
 
     def create_dataset(
@@ -90,13 +90,15 @@ class LooprClient:
         if dataset_slug is None:
             dataset_slug = slug_create(dataset_name)
         dataset = dataset_initializer(dataset_type)
-        URL_PATH = f"dataset.{dataset_type}.create"
+        URL_PATH = self.url_initializer.dataset_create_url()
+        print(URL_PATH)
         response = self.post(
             path=URL_PATH,
             body={
-                "name": dataset_name,
-                "slug": dataset_slug,
+                "dataset_name": dataset_name,
+                "dataset_slug": dataset_slug,
                 "description": description,
+                "dataset_type": dataset_type,
                 **kwargs,
             },
         )
@@ -110,7 +112,7 @@ class LooprClient:
         Response:
             :returns a iterable list of Datasets.
         """
-        URL_PATH = "dataset.list"
+        URL_PATH = self.url_initializer.dataset_list_url()
         return LooprObjectCollection(
             self, URL_PATH, "space_dataset_list", dataset_initializer
         )
@@ -119,43 +121,20 @@ class LooprClient:
         self,
         project_type: str,
         project_name: str,
-        configuration: dict,
+        dataset_type: str,
         project_slug: str = None,
-        vote: int = 1,
-        review: bool = False,
+        description: str = None,
         **kwargs,
     ):
         """
         Create Project.
-        >>> client.create_project(type="object_detection",name="test-loopr-project",
-        >>>                       configuration={"labels": [{"name": "bird", "tool": "bbox", "color": "#000000"}],"attributes": [],})
+        >>> client.create_project(project_type="object_detection", project_name="test-loopr-project", dataset_type="image", description="desc")
 
         Args:
             type (str): Type of Project. (object_detection/relevancy)
             name (str): Name of Project.
             slug (str): Slug of Project.
-            review (bool): Either reviews are allowed or not. By default review = false. (true/false)
-            vote (int): Number of times a data can be annotated by different annotators.
-            configuration (dict): Configuration consists of information regarding the tools used for annotation.
-
-                Configuration consists of following :
-                    - labels : It consists of label_name, type of tool and color.
-                    - attributes : It consists of properties that are attached to different labels.
-
-                Type of tools :
-                    - Point
-                    - Bounding Box
-                    - Line
-                    - Polygon
-                    - Polyline
-
-                Color :
-                    Here color describes the color of the selected tool. It can be in hex(#FF0000) or rgb(rgb(255, 0, 0)) format.
-
-                For instance :
-                    {"configuration": {"labels": [{"name": "car", "tool": "bbox", "color": "#FC7460"}], "attributes": [{"name": "Visibility", "description": "", "conditions": {"label_conditions": {"labels": ["car"]}},
-                                                                                                        "required": true, "type": "categorical", "choices": ["Full View", "Partial View"], "is_multi": false},]}}
-
+            description (str): Description of Project.
 
         Response:
             :returns a Project Object.
@@ -163,15 +142,15 @@ class LooprClient:
         if project_slug is None:
             project_slug = slug_create(project_name)
         project = project_initializer(project_type)
-        URL_PATH = f"project.{project_type.replace('_','.')}.create"
+        URL_PATH = self.url_initializer.project_create_url()
         response = self.post(
             path=URL_PATH,
             body={
                 "project_name": project_name,
-                "slug": project_slug,
-                "configuration": configuration,
-                "vote": vote,
-                "review": review,
+                "project_type": project_type,
+                "dataset_type": dataset_type,
+                "project_slug": project_slug,
+                "description": description,
                 **kwargs,
             },
         )
@@ -185,7 +164,7 @@ class LooprClient:
         Response:
             :returns a iterable list of Projects.
         """
-        URL_PATH = "project.list"
+        URL_PATH = self.url_initializer.project_list_url()
         return LooprObjectCollection(
             self, URL_PATH, "projects_list", project_initializer
         )
@@ -204,7 +183,7 @@ class LooprClient:
             :returns project information like id, name, slug, project type and description.
 
         """
-        URL_PATH = "project.info"
+        URL_PATH = self.url_initializer.project_info_url()
         request = (
             {"project_id": project_id} if project_id else {"project_slug": project_slug}
         )
@@ -229,7 +208,7 @@ class LooprClient:
 
         """
 
-        URL_PATH = "dataset.info"
+        URL_PATH = self.url_initializer.dataset_info_url()
         request = (
             {"dataset_id": dataset_id} if dataset_id else {"dataset_slug": dataset_slug}
         )
