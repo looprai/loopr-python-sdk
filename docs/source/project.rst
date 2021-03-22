@@ -192,7 +192,7 @@ Project
 
     .. code-block:: python
 
-        project = client.update_project(project_id="<project id>")
+        project = client.get_project(project_id="<project id>")
         project.update_taxonomy(taxonomy="{taxonomy data}")
 
 
@@ -205,8 +205,30 @@ Project
 
     .. code-block:: python
 
-        project = client.update_project(project_id="<project id>")
+        project = client.get_project(project_id="<project id>")
         project.get_taxonomy()
+
+
+    |
+
+   .. py:method:: add_predictions(self, experiment_id, predictions, row_id = None, external_id = None, model_name = None, model_version = None,)
+
+    :param str experiment_id: Experiment Id for the predictions.
+    :param dict predictions: Prediction data of the row.
+    :param str row_id: (Optional) The unique id of the row.
+    :param str external_id: (Optional) External id of the row.
+    :param str model_name: (Optional) Name of the model.
+    :param str model_version: (Optional) Version of the model.
+
+    Either row_id or external_id is required.
+
+    :return: returns successful or failure
+    :rtype: str
+
+    .. code-block:: python
+
+        project = client.get_project(project_id="<project id>")
+        project.add_predictions(experiment_id="experiment_id", row_id="row_id", predictions={"classifications": [{"concept_id": "conceptid", "choices": ["choice1"]}]})
 
 
     |

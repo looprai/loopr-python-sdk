@@ -9,6 +9,6 @@ class TestRow:
                 "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"
             },
         )
-        print(row)
+
         response = row.delete()
         assert response == "successful"

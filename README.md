@@ -144,6 +144,11 @@ project.get_taxonomy()
 project.delete()
 ```
 
+#### Add Predictions
+```python
+project.add_predictions(experiment_id="<experiment_id>", row_id="<row_id>", predictions="<prediction data>")
+```
+
 #### List Projects
 
 ```python

@@ -43,6 +43,27 @@ TEST_OBJECT_DETECTION_PROJECT_CONFIG = {
     "instruction": "instruction",
 }
 
+TEST_TAXONOMY_ADD_CATEGORIZATION = {
+    "taxonomy_id": "test_taxonomy_id",
+    "classifications": [
+        {
+            "concept_id": "class1",
+            "name": "How many shirts ?",
+            "required": True,
+            "is_multi": True,
+            "choices": [
+                {
+                    "choice_id": "a",
+                    "name": "1",
+                },
+                {"choice_id": "b", "name": "2"},
+            ],
+        }
+    ],
+    "instruction": "text instruction",
+}
+
+
 TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG = {
     "taxonomy_id": "tid1",
     "labels": [
@@ -141,43 +162,12 @@ TEST_CATEGORIZATION_PROJECT_CONFIG = {
     "instruction": {"text": "text instruction", "type": "md"},
 }
 
-# PREDICTIONS = [
-#     {"tool": "point", "coordinates": [{"x": 109.0, "y": 99}]},
-#     {
-#         "tool": "bbox",
-#         "coordinates": {
-#             "x_top_left": 191,
-#             "y_top_left": 92,
-#             "width": 105,
-#             "height": 92,
-#         },
-#     },
-#     {
-#         "tool": "line",
-#         "coordinates": [
-#             {"x": 279, "y": 263},
-#             {"x": 555, "y": 211},
-#         ],
-#     },
-#     {
-#         "tool": "polygon",
-#         "coordinates": [
-#             {"x": 161.0, "y": 338.0},
-#             {"x": 273.0, "y": 311.0},
-#             {"x": 195.0, "y": 252.0},
-#         ],
-#     },
-#     {
-#         "tool": "polyline",
-#         "coordinates": [
-#             {"x": 511, "y": 355},
-#             {"x": 418, "y": 460},
-#             {"x": 649, "y": 373},
-#             {"x": 519, "y": 356},
-#             {"x": 573, "y": 291},
-#         ],
-#     },
-# ]
+
+TEST_VALID_PREDICTION_BODY = {
+    "classifications": [{"concept_id": "class1", "choices": ["a"]}]
+}
+
+TEST_INVALID_PREDICTION_BODY = {"classifications": [{"choices": ["A", "B"]}]}
 
 
 def random_generator() -> str:

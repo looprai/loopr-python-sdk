@@ -1,10 +1,12 @@
+from time import sleep
+
 import pytest
 
 from loopr.api.dataset.dataset import Dataset
 from loopr.client import LooprClient
 from loopr.exceptions import LooprInvalidResourceError
-from tests.testing_helpers import TEST_IMAGE_DATASET_TYPE  # PREDICTIONS,
 from tests.testing_helpers import (
+    TEST_IMAGE_DATASET_TYPE,
     TEST_SKU_DATASET_TYPE,
     TEST_TEXT_DATASET_TYPE,
     random_generator,
@@ -43,11 +45,13 @@ class TestDataset:
         dataset.delete()
         assert dataset.uid == dataset.to_dict()["uid"]
         assert dataset.dataset_name == dataset_name
+        sleep(2)
         with pytest.raises(LooprInvalidResourceError):
             client.create_dataset(
                 dataset_type="invalid_type",
                 dataset_name=dataset_name,
             )
+        sleep(2)
         with pytest.raises(LooprInvalidResourceError):
             dataset.delete()
 
@@ -74,7 +78,6 @@ class TestDataset:
                     "dataset_type": TEST_IMAGE_DATASET_TYPE,
                     "data": {
                         "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
-                        # "predictions": PREDICTIONS,
                     },
                 },
             ),
