@@ -166,3 +166,33 @@ class Project(LooprObject, AbsProject):
         request = {"project_id": self.uid}
         response = self.client.get(path=URL_PATH, params=request)
         return response
+
+    def add_predictions(
+        self,
+        experiment_id: str,
+        predictions: dict,
+        row_id: str = None,
+        external_id: str = None,
+        model_name: str = None,
+        model_version: str = None,
+    ):
+        """
+        Add Predictions.
+        >>> project.add_predictions(experiment_id="experiment_id", predictions="{dict of prediction data}", row_id="row_id")
+
+        Response:
+            :returns successful message
+        """
+        URL_PATH = self.client.url_initializer.project_add_prediction_url()
+        request = {
+            "project_id": self.uid,
+            "experiment_id": experiment_id,
+            ("row_id" if row_id else "external_id"): (
+                row_id if row_id else external_id
+            ),
+            "predictions": predictions,
+            "model_name": model_name,
+            "model_version": model_version,
+        }
+        response = self.client.post(path=URL_PATH, body=request)
+        return response["message"]

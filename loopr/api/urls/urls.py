@@ -14,6 +14,7 @@ class URLS:
         self.project_taxonomy_export = "project.taxonomy.export"
         self.project_annotation_list = "project.annotation.list"
         self.project_delete = "project.delete"
+        self.project_add_prediction = "project.prediction.add"
 
         # Dataset
         self.dataset_create = "dataset.create"
@@ -80,3 +81,6 @@ class URLS:
 
     def project_annotation_list_url(self):
         return self.base_url + self.project_annotation_list
+
+    def project_add_prediction_url(self):
+        return self.base_url + self.project_add_prediction

@@ -91,7 +91,6 @@ class LooprClient:
             dataset_slug = slug_create(dataset_name)
         dataset = dataset_initializer(dataset_type)
         URL_PATH = self.url_initializer.dataset_create_url()
-        print(URL_PATH)
         response = self.post(
             path=URL_PATH,
             body={

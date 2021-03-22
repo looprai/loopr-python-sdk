@@ -14,13 +14,19 @@ before_install:
 install:
   - poetry install
 stages:
-  - name: "lint and test"
+  - name: "lint"
+    if: type = push
+  - name: "pytest 3.6"
+    if: type = push
+  - name: "pytest 3.7"
+    if: type = push
+  - name: "pytest 3.8"
     if: type = push
   - name: "build and publish"
     if: tag IS present
 jobs:
   include:
-    - stage: "lint and test"
+    - stage: "lint"
       name: "lint using python 3.6 "
       python: 3.6
       script:
@@ -33,15 +39,18 @@ jobs:
       python: 3.8
       script:
         - make lint
-    - name: "test using python 3.6 "
+    - stage: "pytest 3.6"
+      name: "test using python 3.6 "
       python: 3.6
       script:
         - make test
-    - name: "test using python 3.7 "
+    - stage: "pytest 3.7"
+      name: "test using python 3.7 "
       python: 3.7
       script:
         - make test
-    - name: "test using python 3.8 "
+    - stage: "pytest 3.8"
+      name: "test using python 3.8 "
       python: 3.8
       script:
         - make test

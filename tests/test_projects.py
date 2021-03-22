@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from time import sleep
 
 import pytest
 import requests
@@ -17,7 +18,9 @@ from tests.testing_helpers import (
     TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG,
     TEST_RELEVANCY_PROJECT_TYPE,
     TEST_SKU_DATASET_TYPE,
+    TEST_TAXONOMY_ADD_CATEGORIZATION,
     TEST_TEXT_DATASET_TYPE,
+    TEST_VALID_PREDICTION_BODY,
     random_generator,
 )
 
@@ -78,7 +81,6 @@ class TestProject:
     def test_export_configuration(self, project: Project):
         download_url = project.export_configuration()
         response = requests.get(download_url)
-        print(response.text)
         assert json.loads(response.text) == {
             "configuration": TEST_OBJECT_DETECTION_PROJECT_CONFIG_RESPONSE
         }
@@ -133,3 +135,29 @@ class TestProject:
     def test_update_project(self, project: Project):
         response = project.update_project(project_name="newprojectname")
         assert response["project_name"] == "newprojectname"
+
+    def test_add_taxonomy_catproject(self, project_cat: Project):
+        response = project_cat.add_taxonomy(TEST_TAXONOMY_ADD_CATEGORIZATION)
+        assert response == "successful"
+
+    def test_attach_dataset_cat(
+        self, client: LooprClient, project_cat: Project, dataset: Dataset
+    ):
+        response = project_cat.attach_dataset(dataset_ids=[dataset.uid])
+        assert response == "successful"
+
+    def test_add_prediction(
+        self, client: LooprClient, project_cat: Project, dataset: Dataset
+    ):
+        add_row = dataset.add_row(
+            data={
+                "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"
+            },
+        )
+        sleep(2)
+        response = project_cat.add_predictions(
+            experiment_id="newexxperiment",
+            row_id=add_row.uid,
+            predictions=TEST_VALID_PREDICTION_BODY,
+        )
+        assert response == "Prediction added successfully"
