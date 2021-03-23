@@ -107,6 +107,10 @@ class Dataset(LooprObject, AbsDataset):
 
         """
         URL_PATH = self.client.url_initializer.dataset_update_url()
+        if dataset_name is None:
+            dataset_name = self.dataset_name
+        if description is None:
+            description = self.description
         request = {
             "dataset_name": dataset_name,
             "dataset_id": self.uid,
