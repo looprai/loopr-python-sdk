@@ -132,9 +132,22 @@ class TestProject:
         response = project.attach_dataset(dataset_ids=[dataset.uid])
         assert response == "successful"
 
-    def test_update_project(self, project: Project):
-        response = project.update_project(project_name="newprojectname")
-        assert response["project_name"] == "newprojectname"
+    @pytest.mark.parametrize(
+        "test_input",
+        [
+            ({"project_name": "updatedproject", "description": None},),
+            ({"project_name": "updatedproject", "description": "description"},),
+            ({"project_name": None, "description": "description"},),
+        ],
+    )
+    def test_update_project(self, project: Project, test_input):
+        response = project.update_project(
+            project_name=test_input[0]["project_name"],
+            description=test_input[0]["description"],
+        )
+        assert (response["project_name"] == test_input[0]["project_name"]) or (
+            response["description"] == test_input[0]["description"]
+        )
 
     def test_add_taxonomy_catproject(self, project_cat: Project):
         response = project_cat.add_taxonomy(TEST_TAXONOMY_ADD_CATEGORIZATION)

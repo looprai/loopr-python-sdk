@@ -114,6 +114,10 @@ class Project(LooprObject, AbsProject):
 
         """
         URL_PATH = self.client.url_initializer.project_update_url()
+        if project_name is None:
+            project_name = self.project_name
+        if description is None:
+            description = self.description
         request = {
             "project_name": project_name,
             "project_id": self.uid,

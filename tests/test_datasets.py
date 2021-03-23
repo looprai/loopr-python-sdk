@@ -126,6 +126,12 @@ class TestDataset:
                     "data": {"text": "Sample Text"},
                 },
             ),
+            (
+                {
+                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "data": {"text": "Sample Text", "query": "query"},
+                },
+            ),
         ],
     )
     def test_dataset_text_add_row_and_delete(self, dataset_text: Dataset, test_input):
@@ -141,7 +147,7 @@ class TestDataset:
         [
             (
                 {
-                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "dataset_type": TEST_SKU_DATASET_TYPE,
                     "data": {
                         "sku_image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                         "sku_name": "Sample Sku Name",
@@ -150,7 +156,7 @@ class TestDataset:
             ),
             (
                 {
-                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "dataset_type": TEST_SKU_DATASET_TYPE,
                     "data": {
                         "sku_image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                         "sku_name": "Sample Sku Name",
@@ -160,7 +166,7 @@ class TestDataset:
             ),
             (
                 {
-                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                    "dataset_type": TEST_SKU_DATASET_TYPE,
                     "data": {
                         "sku_image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d",
                         "sku_name": "Sample Sku Name",
@@ -178,6 +184,19 @@ class TestDataset:
         dataset_sku.delete_rows([row.uid])
         assert row.dataset_id == dataset_sku.uid
 
-    def test_update_dataset(self, dataset: Dataset):
-        response = dataset.update_dataset(dataset_name="newdatasetname")
-        assert response["dataset_name"] == "newdatasetname"
+    @pytest.mark.parametrize(
+        "test_input",
+        [
+            ({"dataset_name": "updateddataset", "description": None},),
+            ({"dataset_name": "updateddataset", "description": "description"},),
+            ({"dataset_name": None, "description": "description"},),
+        ],
+    )
+    def test_update_dataset(self, dataset: Dataset, test_input):
+        response = dataset.update_dataset(
+            dataset_name=test_input[0]["dataset_name"],
+            description=test_input[0]["description"],
+        )
+        assert (response["dataset_name"] == test_input[0]["dataset_name"]) or (
+            response["description"] == test_input[0]["description"]
+        )
