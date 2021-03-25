@@ -7,6 +7,10 @@ TEST_SKU_DATASET_TYPE = "sku"
 TEST_OBJECT_DETECTION_PROJECT_TYPE = "object_detection"
 TEST_RELEVANCY_PROJECT_TYPE = "relevancy"
 TEST_CATEGORIZATION_PROJECT_TYPE = "categorization"
+TEST_NER_PROJECT_TYPE = "ner"
+TEST_SEGMENTATION_PROJECT_TYPE = "segmentation"
+TEST_OCR_PROJECT_TYPE = "ocr"
+TEST_INVALID_DATASET_ID = "invaliddatasetid"
 TEST_OBJECT_DETECTION_PROJECT_CONFIG = {
     "taxonomy_id": "tid1",
     "labels": [
@@ -162,9 +166,97 @@ TEST_CATEGORIZATION_PROJECT_CONFIG = {
     "instruction": {"text": "text instruction", "type": "md"},
 }
 
+TEST_CATEGORIZATION_RESPONSE_TAXONOMY = {
+    "taxonomy_id": "test_taxonomy_id",
+    "labels": None,
+    "classifications": [
+        {
+            "concept_id": "class1",
+            "name": "How many shirts ?",
+            "required": True,
+            "type": "categorical",
+            "choices": [
+                {"choice_id": "a", "name": "1", "description": None},
+                {"choice_id": "b", "name": "2", "description": None},
+            ],
+            "is_multi": True,
+            "condition": None,
+        }
+    ],
+    "instruction": "text instruction",
+}
+
+
+TEST_NER_PROJECT_CONFIG = {
+    "taxonomy_id": "tid2",
+    "labels": [
+        {
+            "concept_id": "cid2",
+            "name": "noun",
+            "color": "#FC7460",
+            "type": "bbox",
+            "attributes": [
+                {
+                    "attribute_id": "attr1",
+                    "name": "attribute1",
+                    "required": True,
+                    "is_multi": True,
+                    "type": "text",
+                    "choices": [
+                        {
+                            "choice_id": "cid2",
+                            "name": "choice1",
+                            "description": "descriptionn",
+                        }
+                    ],
+                },
+                {
+                    "attribute_id": "attr2",
+                    "name": "attribute2",
+                    "required": True,
+                    "type": "text",
+                },
+            ],
+        }
+    ],
+    "classifications": [],
+    "instruction": "",
+}
+
+TEST_NER_PROJECT_CONFIG_RES = {
+    "taxonomy_id": "tid2",
+    "labels": [
+        {
+            "concept_id": "cid2",
+            "name": "noun",
+            "type": "bbox",
+            "color": "#FC7460",
+            "attributes": [
+                {
+                    "attribute_id": "attr1",
+                    "name": "attribute1",
+                    "required": True,
+                    "type": "text",
+                },
+                {
+                    "attribute_id": "attr2",
+                    "name": "attribute2",
+                    "required": True,
+                    "type": "text",
+                },
+            ],
+        }
+    ],
+    "classifications": [],
+    "instruction": "",
+}
 
 TEST_VALID_PREDICTION_BODY = {
     "classifications": [{"concept_id": "class1", "choices": ["a"]}]
+}
+
+TEST_NER_PREDICTION_BODY = {
+    "classifications": [{"concept_id": "class1", "choices": ["cid2"]}]
 }
 
 TEST_INVALID_PREDICTION_BODY = {"classifications": [{"choices": ["A", "B"]}]}

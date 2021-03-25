@@ -7,6 +7,7 @@ from loopr.resources.constants import (
     object_detection_type_project,
     ocr_type_project,
     relevancy_type_project,
+    segmentation_project,
 )
 
 
@@ -32,6 +33,7 @@ class ProjectInitializer:
                 categorization_type_project: Project,
                 ner_type_project: Project,
                 ocr_type_project: Project,
+                segmentation_project: Project,
             }
 
             return projects[project_type]

@@ -11,12 +11,19 @@ from loopr.client import LooprClient
 from loopr.exceptions import LooprInvalidResourceError
 from tests.testing_helpers import (
     TEST_CATEGORIZATION_PROJECT_TYPE,
+    TEST_CATEGORIZATION_RESPONSE_TAXONOMY,
     TEST_IMAGE_DATASET_TYPE,
+    TEST_INVALID_PREDICTION_BODY,
+    TEST_NER_PROJECT_CONFIG,
+    TEST_NER_PROJECT_CONFIG_RES,
+    TEST_NER_PROJECT_TYPE,
     TEST_OBJECT_DETECTION_PROJECT_CONFIG,
     TEST_OBJECT_DETECTION_PROJECT_CONFIG_RESPONSE,
     TEST_OBJECT_DETECTION_PROJECT_TYPE,
     TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG,
+    TEST_OCR_PROJECT_TYPE,
     TEST_RELEVANCY_PROJECT_TYPE,
+    TEST_SEGMENTATION_PROJECT_TYPE,
     TEST_SKU_DATASET_TYPE,
     TEST_TAXONOMY_ADD_CATEGORIZATION,
     TEST_TEXT_DATASET_TYPE,
@@ -44,8 +51,26 @@ class TestProject:
             ),
             (
                 {
+                    "project_type": TEST_SEGMENTATION_PROJECT_TYPE,
+                    "dataset_type": TEST_IMAGE_DATASET_TYPE,
+                },
+            ),
+            (
+                {
                     "project_type": TEST_CATEGORIZATION_PROJECT_TYPE,
                     "dataset_type": TEST_TEXT_DATASET_TYPE,
+                },
+            ),
+            (
+                {
+                    "project_type": TEST_NER_PROJECT_TYPE,
+                    "dataset_type": TEST_TEXT_DATASET_TYPE,
+                },
+            ),
+            (
+                {
+                    "project_type": TEST_OCR_PROJECT_TYPE,
+                    "dataset_type": TEST_IMAGE_DATASET_TYPE,
                 },
             ),
         ],
@@ -70,9 +95,13 @@ class TestProject:
         with pytest.raises(LooprInvalidResourceError):
             project.delete()
 
+    # OBJECT DETECTION TESTS
+
     def test_taxonomy_add(self, project: Project):
         response = project.add_taxonomy(TEST_OBJECT_DETECTION_PROJECT_CONFIG)
         assert response == "successful"
+        with pytest.raises(LooprInvalidResourceError):
+            project.add_taxonomy(TEST_INVALID_PREDICTION_BODY)
 
     def test_get_taxonomy(self, project: Project):
         response = project.get_taxonomy()
@@ -149,9 +178,17 @@ class TestProject:
             response["description"] == test_input[0]["description"]
         )
 
-    def test_add_taxonomy_catproject(self, project_cat: Project):
+    # Categorization Tests
+
+    def test_taxonomy_add_catproject(self, project_cat: Project):
         response = project_cat.add_taxonomy(TEST_TAXONOMY_ADD_CATEGORIZATION)
         assert response == "successful"
+        with pytest.raises(LooprInvalidResourceError):
+            project_cat.add_taxonomy(TEST_INVALID_PREDICTION_BODY)
+
+    def test_taxonomy_get_catproject(self, project_cat: Project):
+        response = project_cat.get_taxonomy()
+        assert response["taxonomy"] == TEST_CATEGORIZATION_RESPONSE_TAXONOMY
 
     def test_attach_dataset_cat(
         self, client: LooprClient, project_cat: Project, dataset: Dataset
@@ -174,3 +211,21 @@ class TestProject:
             predictions=TEST_VALID_PREDICTION_BODY,
         )
         assert response == "Prediction added successfully"
+
+    # NER Tests
+
+    def test_taxonomy_add_ner(self, project_ner: Project):
+        response = project_ner.add_taxonomy(TEST_NER_PROJECT_CONFIG)
+        assert response == "successful"
+        with pytest.raises(LooprInvalidResourceError):
+            project_ner.add_taxonomy(TEST_INVALID_PREDICTION_BODY)
+
+    def test_taxonomy_get_ner(self, project_ner: Project):
+        response = project_ner.get_taxonomy()
+        assert response["taxonomy"] == TEST_NER_PROJECT_CONFIG_RES
+
+    def test_attach_dataset_ner(
+        self, client: LooprClient, project_ner: Project, dataset_text: Dataset
+    ):
+        response = project_ner.attach_dataset(dataset_ids=[dataset_text.uid])
+        assert response == "successful"

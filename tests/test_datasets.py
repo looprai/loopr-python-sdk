@@ -7,6 +7,7 @@ from loopr.client import LooprClient
 from loopr.exceptions import LooprInvalidResourceError
 from tests.testing_helpers import (
     TEST_IMAGE_DATASET_TYPE,
+    TEST_INVALID_DATASET_ID,
     TEST_SKU_DATASET_TYPE,
     TEST_TEXT_DATASET_TYPE,
     random_generator,
@@ -112,10 +113,34 @@ class TestDataset:
     def test_get_dataset_info_id(self, client: LooprClient, dataset: Dataset):
         response = client.get_dataset(dataset_id=dataset.uid)
         assert response.dataset_name == dataset.dataset_name
+        with pytest.raises(LooprInvalidResourceError):
+            response = client.get_dataset(dataset_id=TEST_INVALID_DATASET_ID)
 
     def test_get_dataset_info_slug(self, client: LooprClient, dataset: Dataset):
         response = client.get_dataset(dataset_slug=dataset.dataset_slug)
         assert response.dataset_name == dataset.dataset_name
+
+    def test_get_text_dataset_info_id(self, client: LooprClient, dataset_text: Dataset):
+        response = client.get_dataset(dataset_id=dataset_text.uid)
+        assert response.dataset_name == dataset_text.dataset_name
+        with pytest.raises(LooprInvalidResourceError):
+            client.get_dataset(dataset_id="sdgfgueygbabdad")
+
+    def test_get_text_dataset_info_slug(
+        self, client: LooprClient, dataset_text: Dataset
+    ):
+        response = client.get_dataset(dataset_slug=dataset_text.dataset_slug)
+        assert response.dataset_name == dataset_text.dataset_name
+
+    def test_get_sku_dataset_info_id(self, client: LooprClient, dataset_sku: Dataset):
+        response = client.get_dataset(dataset_id=dataset_sku.uid)
+        assert response.dataset_name == dataset_sku.dataset_name
+        with pytest.raises(LooprInvalidResourceError):
+            client.get_dataset(dataset_id=TEST_INVALID_DATASET_ID)
+
+    def test_get_sku_dataset_info_slug(self, client: LooprClient, dataset_sku: Dataset):
+        response = client.get_dataset(dataset_slug=dataset_sku.dataset_slug)
+        assert response.dataset_name == dataset_sku.dataset_name
 
     @pytest.mark.parametrize(
         "test_input",
@@ -192,8 +217,42 @@ class TestDataset:
             ({"dataset_name": None, "description": "description"},),
         ],
     )
-    def test_update_dataset(self, dataset: Dataset, test_input):
+    def test_update_image_dataset(self, dataset: Dataset, test_input):
         response = dataset.update_dataset(
+            dataset_name=test_input[0]["dataset_name"],
+            description=test_input[0]["description"],
+        )
+        assert (response["dataset_name"] == test_input[0]["dataset_name"]) or (
+            response["description"] == test_input[0]["description"]
+        )
+
+    @pytest.mark.parametrize(
+        "test_input",
+        [
+            ({"dataset_name": "updateddataset", "description": None},),
+            ({"dataset_name": "updateddataset", "description": "description"},),
+            ({"dataset_name": None, "description": "description"},),
+        ],
+    )
+    def test_update_text_dataset(self, dataset_text: Dataset, test_input):
+        response = dataset_text.update_dataset(
+            dataset_name=test_input[0]["dataset_name"],
+            description=test_input[0]["description"],
+        )
+        assert (response["dataset_name"] == test_input[0]["dataset_name"]) or (
+            response["description"] == test_input[0]["description"]
+        )
+
+    @pytest.mark.parametrize(
+        "test_input",
+        [
+            ({"dataset_name": "updateddataset", "description": None},),
+            ({"dataset_name": "updateddataset", "description": "description"},),
+            ({"dataset_name": None, "description": "description"},),
+        ],
+    )
+    def test_update_sku_dataset(self, dataset_sku: Dataset, test_input):
+        response = dataset_sku.update_dataset(
             dataset_name=test_input[0]["dataset_name"],
             description=test_input[0]["description"],
         )
