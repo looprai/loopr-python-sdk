@@ -61,22 +61,9 @@ Creating a Project
    from loopr.client import LooprClient
    loopr_client = LooprClient(api_key="<your api key>", endpoint="<your endpoint>")
    project = loopr_client.create_project(
-        type="object_detection",
-        name="my-test-project",
-        configuration={
-            "labels": [{"name": "car", "tool": "bbox", "color": "#FC7460"}],
-            "attributes": [
-                {
-                    "name": "color",
-                    "description": "what is color of object ?",
-                    "conditions": {"label_conditions": {"labels": ["car"]}},
-                    "required": true,
-                    "type": "categorical",
-                    "choices": ["red", "blue", "green"],
-                    "is_multi": false,
-                }
-            ],
-        },
+        project_type="object_detection",
+        project_name="my-test-project",
+        dataset_type="image"
     )
     print(project)
 
@@ -85,6 +72,46 @@ This prints:
 .. code-block:: text
 
     <Project {'project_name': 'my-test-project','project_slug': 'my-test-project', 'uid': '57d4d6d3-cce0-4854-bf4e-8edf9783bba0'}>
+
+Adding Taxonomy/Configuration to Project
+----------------------------------------
+.. code-block:: python
+
+   project.add_taxonomy(taxonomy={
+    "taxonomy_id": "tid1",
+    "labels": [
+        {
+          "concept_id": "cid1",
+          "name": "string",
+          "type": "bbox",
+          "color": "#32CD32",
+          "attributes": [
+              {
+                  "attribute_id": "attr1",
+                  "name": "attribute1",
+                  "required": True,
+                  "is_multi": True,
+                  "type": "categorical",
+                  "choices": [
+                      {
+                          "choice_id": "cid2",
+                          "name": "choice1",
+                          "description": "descriptionn",
+                      }
+                  ],
+              },
+              {
+                  "attribute_id": "attr2",
+                  "name": "attribute2",
+                  "required": True,
+                  "type": "text",
+              },
+          ],
+        }
+    ],
+    "classifications": [],
+    "instruction": "instruction" })
+
 
 Exporting project configuration
 -------------------------------
@@ -98,7 +125,7 @@ Deleting a Project
 
     project.delete()
 
-Working with Projects
+Working with Datasets
 ^^^^^^^^^^^^^^^^^^^^^
 Creating a Dataset
 ------------------
@@ -107,8 +134,8 @@ Creating a Dataset
    from loopr.client import LooprClient
    loopr_client = LooprClient(api_key="<your api key>", endpoint="<your endpoint>")
    dataset = loopr_client.create_dataset(
-        type="image",
-        name="my-test-dataset",
+        dataset_type="image",
+        dataset_name="my-test-dataset",
     )
     print(dataset)
 
@@ -122,7 +149,7 @@ Adding row to Dataset
 ---------------------
 .. code-block:: python
 
-   row = dataset.add_row(data={"image_url" : "https://loopr.storage/a61a69be-f152-4175-bab4-e119f980bcsd"})
+   row = dataset.add_row(data={"image" : "https://loopr.storage/a61a69be-f152-4175-bab4-e119f980bcsd"})
 
 Deleting a row
 --------------
