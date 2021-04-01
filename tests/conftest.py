@@ -7,7 +7,9 @@ from loopr.client import LooprClient
 from tests.testing_helpers import (
     TEST_CATEGORIZATION_PROJECT_TYPE,
     TEST_IMAGE_DATASET_TYPE,
+    TEST_NER_PROJECT_TYPE,
     TEST_OBJECT_DETECTION_PROJECT_TYPE,
+    TEST_SEGMENTATION_PROJECT_TYPE,
     TEST_SKU_DATASET_TYPE,
     TEST_TEXT_DATASET_TYPE,
     random_generator,
@@ -81,6 +83,32 @@ def project_cat(client: LooprClient):
         project_slug=name,
         dataset_type=TEST_IMAGE_DATASET_TYPE,
         project_type=TEST_CATEGORIZATION_PROJECT_TYPE,
+    )
+    yield project
+    project.delete()
+
+
+@pytest.fixture(scope="class")
+def project_segmentation(client: LooprClient):
+    name = "test-project-" + random_generator()
+    project = client.create_project(
+        project_name=name,
+        project_slug=name,
+        dataset_type=TEST_IMAGE_DATASET_TYPE,
+        project_type=TEST_SEGMENTATION_PROJECT_TYPE,
+    )
+    yield project
+    project.delete()
+
+
+@pytest.fixture(scope="class")
+def project_ner(client: LooprClient):
+    name = "test-project-" + random_generator()
+    project = client.create_project(
+        project_name=name,
+        project_slug=name,
+        dataset_type=TEST_TEXT_DATASET_TYPE,
+        project_type=TEST_NER_PROJECT_TYPE,
     )
     yield project
     project.delete()
