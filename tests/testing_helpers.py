@@ -256,10 +256,33 @@ TEST_VALID_PREDICTION_BODY = {
 }
 
 TEST_NER_PREDICTION_BODY = {
-    "classifications": [{"concept_id": "class1", "choices": ["cid2"]}]
+    "labels": [{"concept_id": "cid2", "text": "lorem", "start": 0, "end": 5}]
 }
 
 TEST_INVALID_PREDICTION_BODY = {"classifications": [{"choices": ["A", "B"]}]}
+
+TEST_OBJECT_DETECTION_PREDICTION_BODY = {
+    "labels": [
+        {
+            "concept_id": "cid1",
+            "coordinates": [
+                {"x": 236.33333333333331, "y": 147},
+                {"x": 423.3333333333333, "y": 147},
+                {"x": 423.3333333333333, "y": 374},
+                {"x": 236.33333333333331, "y": 374},
+            ],
+        }
+    ]
+}
+
+TEST_SEGMENTATION_PREDICTION_BODY = {
+    "labels": [
+        {
+            "concept_id": "cid1",
+            "segment_uri": "https://dev-storage.loopr.ai/loopr-dev-results/d7ea5949-ddc9-4ea6-a711-aac9898dcd46/098ebc86-8edd-4f5d-9e96-603937714ae1/segments/UzKpRFLlt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=RS515W3VYV0U0D2WJRAD%2F20210405%2Feu-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210405T120559Z&X-Amz-Expires=36000&X-Amz-SignedHeaders=host&X-Amz-Signature=83dcf4689f3bf1baacf5fc20bd01affd030fb0a1f3266c89e153948fe8cff609",
+        }
+    ]
+}
 
 
 def random_generator() -> str:
