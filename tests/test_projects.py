@@ -25,7 +25,6 @@ from tests.testing_helpers import (
     TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG,
     TEST_OCR_PROJECT_TYPE,
     TEST_RELEVANCY_PROJECT_TYPE,
-    TEST_SEGMENTATION_PREDICTION_BODY,
     TEST_SEGMENTATION_PROJECT_TYPE,
     TEST_SKU_DATASET_TYPE,
     TEST_TAXONOMY_ADD_CATEGORIZATION,
@@ -284,17 +283,3 @@ class TestProject:
     ):
         response = project_segmentation.attach_dataset(dataset_ids=[dataset.uid])
         assert response == "successful"
-
-    def test_add_prediction_seg(self, project_segmentation: Project, dataset: Dataset):
-        add_row = dataset.add_row(
-            data={
-                "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"
-            },
-        )
-        sleep(2)
-        response = project_segmentation.add_predictions(
-            experiment_id="newexxperiment",
-            row_id=add_row.uid,
-            predictions=TEST_SEGMENTATION_PREDICTION_BODY,
-        )
-        assert response == "Prediction added successfully"

@@ -279,7 +279,7 @@ TEST_SEGMENTATION_PREDICTION_BODY = {
     "labels": [
         {
             "concept_id": "cid1",
-            "segment_uri": "https://dev-storage.loopr.ai/loopr-dev-results/d7ea5949-ddc9-4ea6-a711-aac9898dcd46/098ebc86-8edd-4f5d-9e96-603937714ae1/segments/UzKpRFLlt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=RS515W3VYV0U0D2WJRAD%2F20210405%2Feu-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210405T120559Z&X-Amz-Expires=36000&X-Amz-SignedHeaders=host&X-Amz-Signature=83dcf4689f3bf1baacf5fc20bd01affd030fb0a1f3266c89e153948fe8cff609",
+            "segment_uri": "https://dev-storage.loopr.ai/loopr-dev-results/f2636e4c-cde5-4295-b952-10ea33b1426a/b75b2e7c-618c-43f9-a848-5c2057ceb29c/segments/krD3xXOK5?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=RS515W3VYV0U0D2WJRAD%2F20210406%2Feu-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210406T062758Z&X-Amz-Expires=36000&X-Amz-SignedHeaders=host&X-Amz-Signature=787d19fc77e578867587436499af50f1d0ced703f50be1bd41c4aa1c1dceee33",
         }
     ]
 }
