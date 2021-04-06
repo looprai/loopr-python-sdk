@@ -14,15 +14,18 @@ from tests.testing_helpers import (
     TEST_CATEGORIZATION_RESPONSE_TAXONOMY,
     TEST_IMAGE_DATASET_TYPE,
     TEST_INVALID_PREDICTION_BODY,
+    TEST_NER_PREDICTION_BODY,
     TEST_NER_PROJECT_CONFIG,
     TEST_NER_PROJECT_CONFIG_RES,
     TEST_NER_PROJECT_TYPE,
+    TEST_OBJECT_DETECTION_PREDICTION_BODY,
     TEST_OBJECT_DETECTION_PROJECT_CONFIG,
     TEST_OBJECT_DETECTION_PROJECT_CONFIG_RESPONSE,
     TEST_OBJECT_DETECTION_PROJECT_TYPE,
     TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG,
     TEST_OCR_PROJECT_TYPE,
     TEST_RELEVANCY_PROJECT_TYPE,
+    TEST_SEGMENTATION_PREDICTION_BODY,
     TEST_SEGMENTATION_PROJECT_TYPE,
     TEST_SKU_DATASET_TYPE,
     TEST_TAXONOMY_ADD_CATEGORIZATION,
@@ -161,6 +164,20 @@ class TestProject:
         response = project.attach_dataset(dataset_ids=[dataset.uid])
         assert response == "successful"
 
+    def test_add_prediction_object_detect(self, project: Project, dataset: Dataset):
+        add_row = dataset.add_row(
+            data={
+                "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"
+            },
+        )
+        sleep(2)
+        response = project.add_predictions(
+            experiment_id="newexxperiment",
+            row_id=add_row.uid,
+            predictions=TEST_OBJECT_DETECTION_PREDICTION_BODY,
+        )
+        assert response == "Prediction added successfully"
+
     @pytest.mark.parametrize(
         "test_input",
         [
@@ -229,3 +246,55 @@ class TestProject:
     ):
         response = project_ner.attach_dataset(dataset_ids=[dataset_text.uid])
         assert response == "successful"
+
+    def test_add_prediction_ner(self, project_ner: Project, dataset_text: Dataset):
+        add_row = dataset_text.add_row(
+            data={"text": "lorem ipsum dolor sit amet"},
+        )
+        sleep(2)
+        response = project_ner.add_predictions(
+            experiment_id="newexxperiment",
+            row_id=add_row.uid,
+            predictions=TEST_NER_PREDICTION_BODY,
+        )
+        assert response == "Prediction added successfully"
+
+    # Segmentation Tests
+
+    def test_taxonomy_add_seg(self, project_segmentation: Project):
+        response = project_segmentation.add_taxonomy(
+            TEST_OBJECT_DETECTION_PROJECT_CONFIG
+        )
+        assert response == "successful"
+        with pytest.raises(LooprInvalidResourceError):
+            project_segmentation.add_taxonomy(TEST_INVALID_PREDICTION_BODY)
+
+    def test_get_taxonomy_seg(self, project_segmentation: Project):
+        response = project_segmentation.get_taxonomy()
+        assert response["taxonomy"] == TEST_OBJECT_DETECTION_PROJECT_CONFIG
+
+    def test_update_taxonomy_seg(self, project_segmentation: Project):
+        response = project_segmentation.update_taxonomy(
+            TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG
+        )
+        assert response == TEST_OBJECT_DETECTION_UPDATE_PROJECT_CONFIG
+
+    def test_attach_dataset_seg(
+        self, client: LooprClient, project_segmentation: Project, dataset: Dataset
+    ):
+        response = project_segmentation.attach_dataset(dataset_ids=[dataset.uid])
+        assert response == "successful"
+
+    def test_add_prediction_seg(self, project_segmentation: Project, dataset: Dataset):
+        add_row = dataset.add_row(
+            data={
+                "image": "gs://loopr-demo-dataset/a61a69be-f152-4175-bab4-e119f980bc3d"
+            },
+        )
+        sleep(2)
+        response = project_segmentation.add_predictions(
+            experiment_id="newexxperiment",
+            row_id=add_row.uid,
+            predictions=TEST_SEGMENTATION_PREDICTION_BODY,
+        )
+        assert response == "Prediction added successfully"
